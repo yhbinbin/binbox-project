@@ -1,0 +1,8 @@
+<svg width="640" height="420" viewBox="0 0 640 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="420" rx="24" fill="#0b0f1f"/>
+  <rect x="44" y="44" width="552" height="332" rx="20" fill="#111827" stroke="#1f2937"/>
+  <path d="M90 130H550" stroke="#60f8ff" stroke-width="4"/>
+  <path d="M90 190H450" stroke="#ff7bd9" stroke-width="4"/>
+  <path d="M90 250H520" stroke="#60f8ff" stroke-width="4"/>
+  <text x="90" y="320" fill="#e2e8f0" font-size="20" font-family="Arial" letter-spacing="6">LAB NOTES</text>
+</svg>

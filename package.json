@@ -1,0 +1,16 @@
+{
+  "name": "binbox-project",
+  "private": true,
+  "packageManager": "npm@10",
+  "workspaces": [
+    "apps/web",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace @binbox/web",
+    "build:web": "npm run build --workspace @binbox/web",
+    "lint:web": "npm run lint --workspace @binbox/web",
+    "dev:api": "cd apps/api && uvicorn app.main:app --reload",
+    "check:structure": "npm run lint:web"
+  }
+}

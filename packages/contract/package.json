@@ -1,0 +1,14 @@
+{
+  "name": "@binbox/contracts",
+  "version": "1.0.0",
+  "description": "Shared API contracts for binbox web and API",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "echo \"No contract tests yet\""
+  },
+  "license": "MIT"
+}
