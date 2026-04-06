@@ -31,10 +31,21 @@ export default function RootLayout({
     (function() {
       try {
         var stored = localStorage.getItem('binbox-theme');
+        var legacyMap = {
+          vaporwave: 'vhs-tape',
+          cnretro: 'vhs-tape',
+          vintage: 'vhs-tape',
+          y2k: 'rom-cd',
+          win95: 'rom-cd',
+          'future-retro': 'vhs-tape',
+          'digital-future': 'rom-cd',
+          vinyl: 'vhs-tape'
+        };
         if (stored) {
           var parsed = JSON.parse(stored);
           if (parsed.state && parsed.state.theme) {
-            document.documentElement.setAttribute('data-theme', parsed.state.theme);
+            var nextTheme = legacyMap[parsed.state.theme] || parsed.state.theme;
+            document.documentElement.setAttribute('data-theme', nextTheme);
           }
         }
       } catch (e) {}

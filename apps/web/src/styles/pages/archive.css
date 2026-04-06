@@ -1,0 +1,148 @@
+.archive-shell {
+  position: relative;
+  animation: binbox-shell-enter var(--binbox-shell-enter-duration) ease-out both;
+}
+
+.archive-ribbon {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, var(--accent-tertiary), transparent);
+  opacity: 0.55;
+  animation: binbox-signal-pulse var(--binbox-signal-pulse-duration) ease-in-out infinite;
+}
+
+.archive-entry {
+  position: relative;
+  animation: binbox-text-enter var(--binbox-text-enter-duration) ease-out both;
+}
+
+.archive-header {
+  animation: binbox-text-enter var(--binbox-text-enter-duration) ease-out both;
+}
+
+.archive-aside {
+  animation: binbox-card-enter var(--binbox-card-enter-duration) ease-out both;
+  animation-delay: var(--binbox-stagger-step);
+}
+
+.archive-entry:nth-of-type(1) {
+  animation-delay: calc(var(--binbox-stagger-step) * 2);
+}
+
+.archive-entry:nth-of-type(2) {
+  animation-delay: calc(var(--binbox-stagger-step) * 3);
+}
+
+.archive-entry:nth-of-type(3) {
+  animation-delay: calc(var(--binbox-stagger-step) * 4);
+}
+
+.archive-footer {
+  animation: binbox-text-enter var(--binbox-text-enter-duration) ease-out both;
+  animation-delay: calc(var(--binbox-stagger-step) * 5);
+}
+
+.archive-entry-dot {
+  position: absolute;
+  left: -1.5rem;
+  top: 0.45rem;
+  width: 0.28rem;
+  height: 0.28rem;
+  background: var(--accent-tertiary);
+  opacity: 0;
+  transition: opacity var(--motion-fast) ease;
+}
+
+.archive-entry:hover .archive-entry-dot {
+  opacity: 1;
+}
+
+.archive-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.7rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--border-default);
+  background: color-mix(in srgb, var(--bg-panel-soft) 74%, transparent);
+  color: var(--text-secondary);
+}
+
+.archive-record-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--radius-indicator);
+  background: var(--destructive);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--destructive) 58%, transparent);
+}
+
+.archive-load-more {
+  border: 1px solid color-mix(in srgb, var(--accent-tertiary) 35%, transparent);
+  color: var(--accent-tertiary);
+  background: color-mix(in srgb, var(--bg-panel-soft) 68%, transparent);
+}
+
+[data-theme="vhs-tape"] .archive-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.018) 0px,
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  opacity: 0.28;
+}
+
+[data-theme="vhs-tape"] .archive-entry-dot {
+  border-radius: 0;
+}
+
+[data-theme="vhs-tape"] .archive-aside {
+  background:
+    linear-gradient(180deg, rgba(70, 31, 66, 0.82), rgba(36, 18, 36, 0.9));
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.04),
+    inset -1px -1px 0 rgba(7, 2, 7, 0.42),
+    0 12px 30px rgba(0, 0, 0, 0.22);
+}
+
+[data-theme="vhs-tape"] .archive-tag,
+[data-theme="vhs-tape"] .archive-load-more {
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 42%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.014) 0px,
+      rgba(255, 255, 255, 0.014) 1px,
+      transparent 1px,
+      transparent 9px
+    ),
+    linear-gradient(180deg, rgba(70, 31, 66, 0.82), rgba(36, 18, 36, 0.9));
+  border-style: dashed;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.03),
+    inset -1px -1px 0 rgba(7, 2, 7, 0.28),
+    2px 2px 0 rgba(0, 0, 0, 0.14);
+}
+
+[data-theme="rom-cd"] .archive-ribbon {
+  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+  opacity: 0.35;
+}
+
+[data-theme="rom-cd"] .archive-tag,
+[data-theme="rom-cd"] .archive-load-more {
+  box-shadow: inset 1px 1px 0 var(--ui-bevel-light), inset -1px -1px 0 var(--ui-bevel-dark);
+  color: var(--text-panel-accent);
+  background: linear-gradient(180deg, rgba(214, 218, 223, 0.96), rgba(178, 184, 191, 0.94));
+  border-color: rgba(0, 116, 217, 0.22);
+}
+
+[data-theme="rom-cd"] .archive-entry-dot,
+[data-theme="rom-cd"] .archive-record-dot {
+  border-radius: 999px;
+}

@@ -84,7 +84,7 @@ export default function WaveformViewer({
         const label = document.createElement("span");
         label.textContent = String(i + 1);
         label.className =
-          "absolute right-2 top-1 text-[10px] uppercase tracking-[0.2em] text-white/80";
+          "absolute right-2 top-1 text-xs uppercase tracking-[0.2em] text-white/80";
         region.element?.appendChild(label);
         region.element?.addEventListener("click", () => {
           const duration = ws.getDuration();
@@ -131,12 +131,10 @@ export default function WaveformViewer({
   }, [activeSlice]);
 
   return (
-    <div className="rounded-3xl border border-[var(--border-default)] bg-[var(--bg-card)] p-4">
-      <div
-        ref={containerRef}
-        className="w-full"
-        aria-label="Break waveform"
-      />
-    </div>
+    <div
+      ref={containerRef}
+      className="w-full"
+      aria-label="Break waveform"
+    />
   );
 }

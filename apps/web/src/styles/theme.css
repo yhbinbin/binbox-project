@@ -1,367 +1,405 @@
 /* =============================================
    binbox Theme System
-   主题色系统 - 支持多套配色方案
+   两套主皮肤：
+   1. VHS-Tape = 蒸汽波 + 中式旧核 + 受损录像带
+   2. ROM-CD = 千禧 + Win95 + 冷蓝设备界面
    ============================================= */
 
-/* ---------------------------------------------
-   Theme: Vaporwave (默认)
-   复古蒸汽波 - 紫色为主，dx7蓝，juno-60红蓝，酒店跑车椰树度假vhs元素
-   --------------------------------------------- */
 :root,
-[data-theme="vaporwave"] {
-  /* 基础色 - VHS 暗夜紫 */
-  --bg-primary: #120428;
-  --bg-secondary: #240a4a;
-  --bg-tertiary: #381270;
-  --bg-card: rgba(18, 4, 40, 0.6);
-  --bg-card-hover: rgba(36, 10, 74, 0.8);
+[data-theme="vhs-tape"] {
+  /* Base backgrounds */
+  --bg-primary: #1d0e1d;
+  --bg-secondary: #241224;
+  --bg-tertiary: #331733;
+  --bg-elevated: #4c2246;
+  --bg-card: rgba(29, 14, 29, 0.9);
+  --bg-card-hover: rgba(43, 19, 43, 0.96);
+  --bg-panel: rgba(24, 9, 24, 0.96);
+  --bg-panel-soft: rgba(50, 22, 48, 0.66);
+  --bg-overlay: rgba(12, 5, 12, 0.76);
 
-  /* 文字色 - VHS 荧光 */
-  --text-primary: #ffd6f9;
-  --text-secondary: #b39ddb;
-  --text-muted: #7e57c2;
+  /* Design-system surface aliases */
+  --surface: #1d0e1d;
+  --surface-container-lowest: #180918;
+  --surface-container-low: #241224;
+  --surface-container: #2d152d;
+  --surface-container-high: #331733;
+  --surface-container-highest: #4c2246;
+  --surface-bright: #5b2b57;
 
-  /* 主题强调色 */
-  --accent-primary: #ff007f; /* Juno-60 红 */
-  --accent-secondary: #00ffff; /* DX7 蓝 */
-  --accent-tertiary: #ffaa00; /* 日落余晖橙 */
-  --accent-quaternary: #9d00ff; /* 霓虹紫 */
+  /* Text */
+  --text-primary: #ffdff4;
+  --text-secondary: #e9b8d8;
+  --text-muted: #be87b4;
+  --text-quiet: #875f87;
+  --text-inverse: #150915;
+  --text-panel-strong: #fff4de;
+  --text-panel-accent: #ffe2a6;
+  --on-surface: #ffdff4;
+  --on-surface-muted: #c796b8;
 
-  /* 功能色 */
-  --destructive: #ff3366;
-  --destructive-foreground: #ffffff;
-  --success: #00ffcc;
-  --success-foreground: #000000;
-  --warning: #ffb700;
-  --warning-foreground: #000000;
-  --info: #00ccff;
-  --info-foreground: #ffffff;
+  /* Accent system */
+  --accent-primary: #ff71ce;
+  --accent-secondary: #5ce1e6;
+  --accent-tertiary: #ffb86b;
+  --accent-quaternary: #ff8a5b;
+  --accent-quinary: #6fe6a8;
+  --accent-senary: #7d8bff;
+  --accent-septenary: #ff5f9f;
+  --accent-octonary: #e8d1a8;
 
-  /* 输入框/表单 */
-  --input: rgba(0, 255, 255, 0.1);
-  --input-border: rgba(255, 0, 127, 0.3);
-  --ring: rgba(0, 255, 255, 0.6);
-  --radius: 0.5rem;
+  /* Design-system signal aliases */
+  --primary: #ff71ce;
+  --primary-container: #ff71ce;
+  --secondary: #5ce1e6;
+  --secondary-container: #64f5ff;
+  --tertiary: #ffb86b;
+  --tertiary-container: #ffc76f;
+  --outline: rgba(255, 209, 242, 0.22);
+  --outline-variant: rgba(255, 209, 242, 0.14);
 
-  /* 边框色 */
-  --border-default: rgba(157, 0, 255, 0.2);
-  --border-hover: rgba(0, 255, 255, 0.5);
+  /* Semantic signal colors */
+  --signal-hot: #ff71ce;
+  --signal-cold: #64f5ff;
+  --signal-sun: #ffc76f;
+  --signal-lagoon: #59d4c8;
+  --signal-banner: #e43f45;
+  --signal-tile: #d7d2c8;
+  --signal-glitch: #7d8bff;
+  --signal-rec: #ff5f6d;
 
-  /* 渐变背景 - 椰树落日与网格 */
-  --gradient-bg: linear-gradient(180deg, #120428 0%, #240a4a 40%, rgba(255,0,127,0.1) 80%, rgba(0,255,255,0.05) 100%);
+  /* Status */
+  --destructive: #ff4d6d;
+  --destructive-foreground: #fffaf7;
+  --success: #78e08f;
+  --success-foreground: #08130d;
+  --warning: #ffbd59;
+  --warning-foreground: #1d1406;
+  --info: #67d6ff;
+  --info-foreground: #07141d;
 
-  /* 选中高亮 */
-  --selection-bg: rgba(255, 0, 127, 0.5);
-  --selection-text: #ffffff;
-
-  /* 滚动条 */
-  --scrollbar-track: rgba(18, 4, 40, 0.5);
-  --scrollbar-thumb: rgba(0, 255, 255, 0.6);
-  --scrollbar-thumb-hover: rgba(255, 0, 127, 0.8);
-
-  /* 兼容旧变量 */
-  --background: var(--bg-primary);
-  --foreground: var(--text-primary);
-  --neon-pink: var(--accent-primary);
-  --neon-teal: var(--accent-secondary);
-  --neon-green: var(--accent-tertiary);
-}
-
-/* ---------------------------------------------
-   Theme: Y2K / Frutiger Aero
-   千禧年风格 - 光碟、frutigerAero、蓝天草坪、蓝绿橙色msn头像
-   --------------------------------------------- */
-[data-theme="y2k"] {
-  /* 基础色 - 纯净亚克力质感 */
-  --bg-primary: #e6f2ff;
-  --bg-secondary: #f0f7ff;
-  --bg-tertiary: #ffffff;
-  --bg-card: rgba(255, 255, 255, 0.7);
-  --bg-card-hover: rgba(255, 255, 255, 0.9);
-  
-  /* 毛玻璃效果支持需全局添加 backdrop-filter: blur(x) */
-
-  /* 文字色 - 鲜亮可读 */
-  --text-primary: #003366;
-  --text-secondary: #005bb5;
-  --text-muted: #6699cc;
-
-  /* 主题强调色 - MSN / Frutiger Aero 水果色 */
-  --accent-primary: #0088ff; /* 气泡蓝 */
-  --accent-secondary: #33cc33; /* 草坪绿 */
-  --accent-tertiary: #ff9900; /* MSN 橙 */
-  --accent-quaternary: #00cccc; /* 光碟青 */
-
-  /* 功能色 */
-  --destructive: #ff3333;
-  --destructive-foreground: #ffffff;
-  --success: #33cc33;
-  --success-foreground: #ffffff;
-  --warning: #ffcc00;
-  --warning-foreground: #000000;
-  --info: #00aaff;
-  --info-foreground: #ffffff;
-
-  /* 输入框/表单 - 玻璃果冻感 */
-  --input: rgba(255, 255, 255, 0.5);
-  --input-border: rgba(0, 136, 255, 0.3);
-  --ring: rgba(0, 136, 255, 0.4);
-  --radius: 1rem; /* 更圆润 */
-
-  /* 边框色 */
-  --border-default: rgba(0, 136, 255, 0.15);
-  --border-hover: rgba(51, 204, 51, 0.5);
-
-  /* 渐变背景 - 蓝天白云绿草 */
-  --gradient-bg: linear-gradient(180deg, #b3e0ff 0%, #e6f2ff 50%, #e6ffe6 100%);
-
-  /* 选中高亮 */
-  --selection-bg: rgba(0, 136, 255, 0.3);
-  --selection-text: #003366;
-
-  /* 滚动条 */
-  --scrollbar-track: rgba(230, 242, 255, 0.5);
-  --scrollbar-thumb: rgba(0, 136, 255, 0.5);
-  --scrollbar-thumb-hover: rgba(51, 204, 51, 0.7);
-
-  /* 兼容旧变量 */
-  --background: var(--bg-primary);
-  --foreground: var(--text-primary);
-  --neon-pink: var(--accent-tertiary);
-  --neon-teal: var(--accent-primary);
-  --neon-green: var(--accent-secondary);
-}
-
-/* ---------------------------------------------
-   Theme: Vintage
-   复古怀旧 - 咖啡、马卡龙、法式、意式配色混搭
-   --------------------------------------------- */
-[data-theme="vintage"] {
-  /* 基础色 - 温暖奶咖，做旧特调纸张色 */
-  --bg-primary: #f4efe6;
-  --bg-secondary: #eaddcb;
-  --bg-tertiary: #dfccb6;
-  --bg-card: rgba(244, 239, 230, 0.85);
-  --bg-card-hover: rgba(255, 255, 255, 0.9);
-
-  /* 文字色 - 咖啡棕 */
-  --text-primary: #3c2a21;
-  --text-secondary: #5a4033;
-  --text-muted: #8b6b5d;
-
-  /* 主题强调色 - 马卡龙与法式意式混搭 */
-  --accent-primary: #c86b85; /* 慕斯覆盆子 */
-  --accent-secondary: #7e9a8f; /* 鼠尾草青 */
-  --accent-tertiary: #e6a57e; /* 奶橘 */
-  --accent-quaternary: #6a6b83; /* 灰蓝紫夜 */
-
-  /* 功能色 */
-  --destructive: #b54a4a;
-  --destructive-foreground: #ffffff;
-  --success: #6c9a6a;
-  --success-foreground: #ffffff;
-  --warning: #d99a5b;
-  --warning-foreground: #000000;
-  --info: #5b87a8;
-  --info-foreground: #ffffff;
-
-  /* 输入框/表单 */
-  --input: rgba(255, 255, 255, 0.6);
-  --input-border: rgba(139, 107, 93, 0.2);
-  --ring: rgba(200, 107, 133, 0.4);
-  --radius: 0.375rem;
-
-  /* 边框色 */
-  --border-default: rgba(139, 107, 93, 0.15);
-  --border-hover: rgba(126, 154, 143, 0.5);
-
-  /* 渐变背景 - 香草咖啡柔和过渡 */
-  --gradient-bg: radial-gradient(ellipse at top right, rgba(200, 107, 133, 0.08), transparent 50%),
-    radial-gradient(circle at 10% 80%, rgba(126, 154, 143, 0.1), transparent 40%),
-    linear-gradient(135deg, #f4efe6 0%, #eaddcb 100%);
-
-  /* 选中高亮 */
-  --selection-bg: rgba(230, 165, 126, 0.4);
-  --selection-text: #3c2a21;
-
-  /* 滚动条 */
-  --scrollbar-track: rgba(223, 204, 182, 0.3);
-  --scrollbar-thumb: rgba(139, 107, 93, 0.4);
-  --scrollbar-thumb-hover: rgba(139, 107, 93, 0.6);
-
-  /* 兼容旧变量 */
-  --background: var(--bg-primary);
-  --foreground: var(--text-primary);
-  --neon-pink: var(--accent-primary);
-  --neon-teal: var(--accent-secondary);
-  --neon-green: var(--accent-tertiary);
-}
-
-/* ---------------------------------------------
-   Theme: Windows 95
-   经典 Win95 风格 - 像素风、win95的画图软件、蓝屏、绿色壁纸、灰色画框
-   --------------------------------------------- */
-[data-theme="win95"] {
-  /* 基础色 - 标准 Win95 灰 */
-  --bg-primary: #008080; /* Win95 经典绿色网格壁纸底色 */
-  --bg-secondary: #006b6b;
-  --bg-tertiary: #008080;
-  --bg-card: #c0c0c0; /* 标准灰色画框/窗口背景 */
-  --bg-card-hover: #dfdfdf;
-
-  /* 文字色 */
-  --text-primary: #000000;
-  --text-secondary: #222222;
-  --text-muted: #555555;
-
-  /* 主题强调色 - Win95 高饱和经典 */
-  --accent-primary: #0000ff; /* 经典深蓝 (比如蓝屏基础色, 画图软件原色) */
-  --accent-secondary: #ff00ff; /* 洋红/品红 */
-  --accent-tertiary: #ffff00; /* 亮黄 */
-  --accent-quaternary: #00ff00; /* 荧光绿 */
-
-  /* 功能色 */
-  --destructive: #ff0000; /* 纯红 */
-  --destructive-foreground: #ffffff;
-  --success: #008000; /* 深绿 */
-  --success-foreground: #ffffff;
-  --warning: #ffff00; /* 亮黄 */
-  --warning-foreground: #000000;
-  --info: #0000a8; /* 深蓝屏颜色 */
-  --info-foreground: #ffffff;
-
-  /* 输入框/表单 - 经典内凹效果模拟 */
-  --input: #ffffff;
-  --input-border: #808080; /* 下沉黑线 */
-  --ring: transparent; /* 不需要光晕，纯实线选框 */
+  /* Form */
+  --input: rgba(24, 9, 24, 0.96);
+  --input-border: rgba(255, 113, 206, 0.4);
+  --ring: rgba(95, 242, 255, 0.55);
   --radius: 0;
 
-  /* 边框色 - Win95 突起边框模拟使用的外高光和内阴影替代 */
-  --border-default: #808080; 
-  --border-hover: #000000; 
+  /* Borders */
+  --border-default: rgba(255, 209, 242, 0.14);
+  --border-strong: rgba(255, 113, 206, 0.32);
+  --border-hover: rgba(95, 242, 255, 0.48);
+  --border-accent: rgba(255, 200, 87, 0.5);
 
-  /* 渐变背景 - 纯色填涂风格，或轻微点阵感模拟 */
-  --gradient-bg: #008080; /* 默认绿松石底色 */
+  /* Decorative UI colors */
+  --ui-frame: rgba(255, 209, 242, 0.08);
+  --ui-grid: rgba(95, 242, 255, 0.08);
+  --ui-glow: rgba(255, 113, 206, 0.28);
+  --ui-shadow: rgba(0, 0, 0, 0);
+  --ui-ghost-border: rgba(255, 209, 242, 0.2);
+  --ui-monitor-glow: rgba(255, 113, 206, 0.18);
+  --ui-bevel-light: rgba(255, 245, 252, 0.08);
+  --ui-bevel-dark: rgba(7, 2, 7, 0.42);
 
-  /* 选中高亮 - 经典深蓝框白字 */
-  --selection-bg: #0000a8;
-  --selection-text: #ffffff;
+  /* Shape, motion, and texture */
+  --radius-panel: 0;
+  --radius-control: 0;
+  --radius-chip: 2px;
+  --radius-indicator: 999px;
+  --panel-blur: 12px;
+  --motion-fast: 120ms;
+  --motion-normal: 220ms;
+  --button-press-transform: translateY(1px);
+  --panel-shadow:
+    0 0 0 1px rgba(255, 209, 242, 0.12),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.05),
+    inset -1px -1px 0 rgba(7, 2, 7, 0.22),
+    0 16px 34px rgba(255, 113, 206, 0.1);
+  --panel-shadow-hover:
+    0 0 0 1px rgba(95, 242, 255, 0.18),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.06),
+    inset -1px -1px 0 rgba(7, 2, 7, 0.26),
+    0 20px 42px rgba(255, 113, 206, 0.15);
+  --panel-frame-shadow:
+    inset 0 0 0 1px rgba(255, 209, 242, 0.1),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.04),
+    inset -1px -1px 0 rgba(7, 2, 7, 0.14);
+  --input-shadow: inset 0 0 0 1px rgba(255, 209, 242, 0.08);
+  --focus-shadow: 0 0 0 2px rgba(95, 242, 255, 0.24);
+  --texture-overlay:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.018) 0px,
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px,
+      transparent 3px
+    );
 
-  /* 滚动条 - Win95 灰色和方块 */
-  --scrollbar-track: #dfdfdf;
-  --scrollbar-thumb: #c0c0c0;
-  --scrollbar-thumb-hover: #808080;
+  /* Gradients and selection */
+  --gradient-bg:
+    radial-gradient(circle at top right, rgba(255, 113, 206, 0.22), transparent 28%),
+    radial-gradient(circle at 14% 82%, rgba(95, 242, 255, 0.14), transparent 24%),
+    radial-gradient(circle at 76% 68%, rgba(255, 184, 107, 0.12), transparent 22%),
+    linear-gradient(180deg, #180918 0%, #1d0e1d 38%, #2d152d 68%, #180918 100%);
 
-  /* 兼容旧变量 */
-  --background: var(--bg-card); /* 使主内容区域像一个打开的窗口 */
-  --foreground: var(--text-primary);
-  --neon-pink: var(--accent-secondary);
-  --neon-teal: var(--accent-primary);
-  --neon-green: var(--accent-quaternary);
-}
+  --selection-bg: rgba(255, 113, 206, 0.38);
+  --selection-text: #fff7fb;
 
-/* ---------------------------------------------
-   Theme: 中式旧核 (Chinese Retrocore)
-   中式旧核 - 白瓷砖、蓝玻璃、水泥、火红布条这些中国90后怀旧的元素
-   --------------------------------------------- */
-[data-theme="cnretro"] {
-  /* 基础色 - 水泥灰底，带一点灰蒙蒙的质感 */
-  --bg-primary: #8a8d91; /* 粗粝水泥墙 */
-  --bg-secondary: #a3a6a9; /* 水泥地坪 */
-  --bg-tertiary: #c0c3c5;
-  --bg-card: rgba(235, 238, 240, 0.9); /* 白瓷砖面板 */
-  --bg-card-hover: #ffffff; /* 高亮白瓷砖 */
+  /* Scrollbar */
+  --scrollbar-track: rgba(20, 8, 28, 0.45);
+  --scrollbar-thumb: rgba(95, 242, 255, 0.5);
+  --scrollbar-thumb-hover: rgba(255, 95, 162, 0.82);
 
-  /* 文字色 */
-  --text-primary: #111111; /* 黑体字 */
-  --text-secondary: #333333;
-  --text-muted: #666666;
+  /* Component fills */
+  --button-fill-primary: linear-gradient(135deg, rgba(255, 113, 206, 0.92), rgba(255, 95, 159, 0.92));
+  --button-fill-secondary: linear-gradient(135deg, rgba(92, 225, 230, 0.2), rgba(100, 245, 255, 0.12));
+  --button-fill-tertiary: linear-gradient(135deg, rgba(255, 184, 107, 0.2), rgba(255, 199, 111, 0.12));
+  --button-fill-ghost: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
 
-  /* 主题强调色 - 标志性的旧核色彩 */
-  --accent-primary: #d32f2f; /* 褪色红布条 / 红漆标语 */
-  --accent-secondary: #4a90e2; /* 蓝玻璃反光 */
-  --accent-tertiary: #f4d03f; /* 黄漆安全线 / 栏杆黄 */
-  --accent-quaternary: #2e7d32; /* 绿色防盗网 / 绿色漆木门 */
-
-  /* 功能色 */
-  --destructive: #d32f2f;
-  --destructive-foreground: #ffffff;
-  --success: #2e7d32;
-  --success-foreground: #ffffff;
-  --warning: #f4d03f;
-  --warning-foreground: #000000;
-  --info: #4a90e2;
-  --info-foreground: #ffffff;
-
-  /* 输入框/表单 - 类似旧式塑料按键或泛黄塑料 */
-  --input: #ebf0f2;
-  --input-border: #666666; /* 粗重黑框味 */
-  --ring: rgba(211, 47, 47, 0.4);
-  --radius: 0; /* 直角边缘 */
-
-  /* 边框色 */
-  --border-default: #8a8d91;
-  --border-hover: #d32f2f;
-
-  /* 渐变背景 - 极简白瓷砖带水泥缝的想象 */
-  --gradient-bg: linear-gradient(135deg, #a3a6a9 0%, #8a8d91 50%, #76797c 100%);
-
-  /* 选中高亮 */
-  --selection-bg: rgba(74, 144, 226, 0.4);
-  --selection-text: #111111;
-
-  /* 滚动条 */
-  --scrollbar-track: rgba(138, 141, 145, 0.3);
-  --scrollbar-thumb: #666666;
-  --scrollbar-thumb-hover: #d32f2f;
-
-  /* 兼容旧变量 */
+  /* Compatibility aliases */
   --background: var(--bg-primary);
   --foreground: var(--text-primary);
   --neon-pink: var(--accent-primary);
   --neon-teal: var(--accent-secondary);
-  --neon-green: var(--accent-tertiary);
+  --neon-green: var(--accent-quinary);
 }
 
-/* ---------------------------------------------
-   Theme Placeholder: Future themes
-   预留主题位置 - 可扩展更多主题
-   
-   示例：Cyberpunk、Synthwave、Pastel 等
-   --------------------------------------------- */
-/* [data-theme="cyberpunk"] { ... } */
-/* [data-theme="synthwave"] { ... } */
-/* [data-theme="pastel"] { ... } */
+[data-theme="rom-cd"] {
+  /* ROM-CD color law:
+     - silver / light-gray surfaces accept dark text and deep blue only
+     - avoid gray text on silver surfaces
+     - avoid green or orange text directly on silver surfaces
+     - green / orange should live on dark chips, indicators, meters, or transparent overlays
+  */
+  /* Base backgrounds */
+  --bg-primary: #121414;
+  --bg-secondary: #1a222a;
+  --bg-tertiary: #292a2a;
+  --bg-elevated: #b9bec4;
+  --bg-card: rgba(41, 42, 42, 0.96);
+  --bg-card-hover: rgba(56, 58, 59, 0.98);
+  --bg-panel: rgba(185, 190, 196, 0.92);
+  --bg-panel-soft: rgba(212, 216, 221, 0.72);
+  --bg-overlay: rgba(8, 10, 11, 0.58);
 
-/* ---------------------------------------------
-   Global Styles using Theme Variables
-   --------------------------------------------- */
+  /* Design-system surface aliases */
+  --surface: #121414;
+  --surface-container-lowest: #0d0e0f;
+  --surface-container-low: #16191b;
+  --surface-container: #202325;
+  --surface-container-high: #292a2a;
+  --surface-container-highest: #b9bec4;
+  --surface-bright: #d4d8dd;
+
+  /* Text */
+  --text-primary: #edf6ff;
+  --text-secondary: #b5c8db;
+  --text-muted: #8195a8;
+  --text-quiet: #65788b;
+  --text-inverse: #10161d;
+  --text-panel-strong: #171c22;
+  --text-panel-accent: #0d4f8f;
+  --on-surface: #edf6ff;
+  --on-surface-muted: #9fb3c6;
+
+  /* Accent system */
+  --accent-primary: #0074d9;
+  --accent-secondary: #4be253;
+  --accent-tertiary: #ff9f2d;
+  --accent-quaternary: #98e1ff;
+  --accent-quinary: #8ef58f;
+  --accent-senary: #a7c8ff;
+  --accent-septenary: #c7ccd2;
+  --accent-octonary: #6db8ff;
+
+  /* Design-system signal aliases */
+  --primary: #0074d9;
+  --primary-container: #0074d9;
+  --secondary: #4be253;
+  --secondary-container: #4be253;
+  --tertiary: #ff9f2d;
+  --tertiary-container: #ffb14d;
+  --outline: rgba(227, 226, 226, 0.22);
+  --outline-variant: rgba(227, 226, 226, 0.15);
+
+  /* Semantic signal colors */
+  --signal-hot: #ff9f2d;
+  --signal-cold: #98e1ff;
+  --signal-sun: #ffb14d;
+  --signal-lagoon: #4be253;
+  --signal-window: #b9bec4;
+  --signal-desktop: #414753;
+  --signal-chassis: #292a2a;
+  --signal-monitor: #121414;
+
+  /* Status */
+  --destructive: #ff6363;
+  --destructive-foreground: #ffffff;
+  --success: #4be253;
+  --success-foreground: #081708;
+  --warning: #ff9f2d;
+  --warning-foreground: #241604;
+  --info: #2f93ff;
+  --info-foreground: #08111b;
+
+  /* Form */
+  --input: rgba(13, 14, 15, 0.98);
+  --input-border: rgba(0, 116, 217, 0.34);
+  --ring: rgba(0, 116, 217, 0.42);
+  --radius: 0;
+
+  /* Borders */
+  --border-default: rgba(227, 226, 226, 0.16);
+  --border-strong: rgba(0, 116, 217, 0.3);
+  --border-hover: rgba(75, 226, 83, 0.48);
+  --border-accent: rgba(255, 159, 45, 0.5);
+
+  /* Decorative UI colors */
+  --ui-frame: rgba(192, 198, 208, 0.54);
+  --ui-grid: rgba(0, 116, 217, 0.09);
+  --ui-glow: rgba(0, 116, 217, 0.28);
+  --ui-shadow: rgba(0, 0, 0, 0);
+  --ui-ghost-border: rgba(227, 226, 226, 0.2);
+  --ui-monitor-glow: rgba(0, 116, 217, 0.22);
+  --ui-bevel-light: #e3e2e2;
+  --ui-bevel-dark: #414753;
+
+  /* Shared five-layer structural language
+     backdrop: deepest background layer behind the interface
+               dark base, bright text only
+     shell: silver / light-gray chassis surfaces
+            ROM-CD text may use deep black / deep blue / deep green only
+     raised-silver: more protruding metallic silver controls on top of shell
+            ROM-CD text may use deep black / deep blue / deep green only
+     dark-button: black rubber-like protruding buttons
+            bright text only
+     content-screen: recessed dark monitor / display / readout area
+            bright text only
+
+     bright text set: white / bright green / bright orange / silver / bright blue
+     deep text set: deep black / deep blue / deep green
+  */
+
+  /* Shape, motion, and texture */
+  --radius-panel: 8px;
+  --radius-control: 6px;
+  --radius-chip: 6px;
+  --radius-indicator: 0;
+  --panel-blur: 10px;
+  --motion-fast: 60ms;
+  --motion-normal: 120ms;
+  --button-press-transform: translate(1px, 1px);
+  --panel-shadow:
+    inset 1px 1px 0 rgba(227, 226, 226, 0.7),
+    inset -1px -1px 0 rgba(65, 71, 83, 0.62),
+    0 7px 16px rgba(0, 0, 0, 0.1);
+  --panel-shadow-hover:
+    inset 1px 1px 0 rgba(240, 240, 240, 0.88),
+    inset -1px -1px 0 rgba(46, 52, 64, 0.74),
+    0 9px 20px rgba(94, 212, 255, 0.1);
+  --panel-frame-shadow:
+    inset 1px 1px 0 rgba(227, 226, 226, 0.52),
+    inset -1px -1px 0 rgba(65, 71, 83, 0.54);
+  --input-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.42), inset -1px -1px 0 rgba(227, 226, 226, 0.08);
+  --focus-shadow: 0 0 0 2px rgba(94, 212, 255, 0.2);
+  --texture-overlay:
+    linear-gradient(rgba(108, 184, 255, 0.035), rgba(108, 184, 255, 0.035)),
+    repeating-linear-gradient(
+      0deg,
+      rgba(70, 70, 76, 0.14) 0px,
+      rgba(70, 70, 76, 0.14) 1px,
+      transparent 1px,
+      transparent 8px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(70, 70, 76, 0.08) 0px,
+      rgba(70, 70, 76, 0.08) 1px,
+      transparent 1px,
+      transparent 8px
+    );
+
+  /* Gradients and selection */
+  --gradient-bg:
+    radial-gradient(circle at 84% 10%, rgba(0, 116, 217, 0.2), transparent 24%),
+    radial-gradient(circle at 24% 82%, rgba(75, 226, 83, 0.08), transparent 18%),
+    radial-gradient(circle at 62% 72%, rgba(255, 159, 45, 0.08), transparent 16%),
+    linear-gradient(180deg, #0d0e0f 0%, #121414 36%, #18202a 68%, #0f1318 100%);
+
+  --selection-bg: rgba(0, 116, 217, 0.3);
+  --selection-text: #f5fbff;
+
+  /* Scrollbar */
+  --scrollbar-track: rgba(13, 14, 15, 0.72);
+  --scrollbar-thumb: rgba(185, 190, 196, 0.58);
+  --scrollbar-thumb-hover: rgba(0, 116, 217, 0.72);
+
+  /* Component fills */
+  --button-fill-primary: linear-gradient(180deg, rgba(0, 116, 217, 1), rgba(0, 116, 217, 0.84));
+  --button-fill-secondary: linear-gradient(180deg, rgba(198, 198, 198, 0.96), rgba(149, 154, 160, 0.96));
+  --button-fill-tertiary: linear-gradient(180deg, rgba(41, 42, 42, 0.94), rgba(18, 20, 20, 0.98));
+  --button-fill-ghost: linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0.005));
+
+  /* Compatibility aliases */
+  --background: var(--bg-primary);
+  --foreground: var(--text-primary);
+  --neon-pink: var(--accent-quaternary);
+  --neon-teal: var(--accent-secondary);
+  --neon-green: var(--accent-quinary);
+}
+
 body {
   background: var(--gradient-bg);
   background-attachment: fixed;
-  /* 主题切换过渡动画 */
   transition: background 0.4s ease-in-out, color 0.3s ease-in-out;
+  position: relative;
+  isolation: isolate;
 }
 
-/* 全局过渡效果 - 主题切换时平滑变化 */
 *,
 *::before,
 *::after {
-  transition: background-color 0.3s ease-in-out,
-              border-color 0.3s ease-in-out,
-              color 0.2s ease-in-out;
+  transition:
+    background-color var(--motion-normal) ease-in-out,
+    border-color var(--motion-normal) ease-in-out,
+    color 0.2s ease-in-out,
+    box-shadow var(--motion-fast) ease-in-out,
+    transform var(--motion-fast) ease-in-out;
 }
 
-/* 排除动画和交互元素的过渡干扰 */
 button,
 a,
 input,
 [class*="transition"] {
-  transition: background-color 0.15s ease,
-              border-color 0.15s ease,
-              color 0.15s ease,
-              transform 0.15s ease,
-              opacity 0.15s ease;
+  transition:
+    background-color var(--motion-fast) ease,
+    border-color var(--motion-fast) ease,
+    color var(--motion-fast) ease,
+    transform var(--motion-fast) ease,
+    opacity var(--motion-fast) ease,
+    box-shadow var(--motion-fast) ease;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image: var(--texture-overlay);
+  opacity: 1;
+  mix-blend-mode: screen;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at top, var(--ui-monitor-glow), transparent 36%),
+    radial-gradient(circle at bottom right, var(--ui-glow), transparent 28%);
+  opacity: 0.8;
 }
 
 ::selection {
@@ -369,9 +407,6 @@ input,
   color: var(--selection-text);
 }
 
-/* ---------------------------------------------
-   Custom Scrollbar - 自定义滚动条
-   --------------------------------------------- */
 * {
   scrollbar-width: auto;
   scrollbar-color: var(--scrollbar-thumb) transparent;

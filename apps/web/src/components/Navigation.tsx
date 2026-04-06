@@ -20,24 +20,24 @@ export default function Navigation() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--border-default)] bg-[var(--bg-primary)]/70 backdrop-blur">
-      <nav className="mx-auto w-full max-w-6xl px-6 py-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+    <header className="site-header">
+      <nav className="site-nav-shell">
+        <div className="site-nav-row">
           <div className="flex items-center justify-between sm:justify-start sm:gap-6">
             <Link
               href="/"
-              className="cursor-pointer text-lg font-semibold uppercase tracking-[0.2em] text-[var(--accent-primary)]"
+              className="site-brand cursor-pointer"
             >
               {tCommon('siteName')}
             </Link>
-            <div className="flex items-center gap-3 sm:hidden">
+            <div className="site-nav-controls flex items-center sm:hidden">
               <ThemeSwitcher />
-              <span className="text-[var(--text-muted)]/40">|</span>
+              <span className="site-nav-divider">|</span>
               <LocaleSwitcher />
             </div>
           </div>
 
-          <div className="flex items-center gap-4 overflow-x-auto text-sm uppercase tracking-[0.18em] text-[var(--text-secondary)] sm:ml-6 sm:flex-1 sm:overflow-visible">
+          <div className="site-nav-links text-sm uppercase tracking-[0.18em]">
             {navItems.map((item) => {
               const isActive =
                 item.href === '/'
@@ -47,10 +47,8 @@ export default function Navigation() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`cursor-pointer whitespace-nowrap transition hover:text-[var(--accent-primary)] ${
-                    isActive
-                      ? 'text-[var(--accent-primary)] underline decoration-[var(--accent-primary)] decoration-2 underline-offset-8'
-                      : ''
+                  className={`site-nav-link cursor-pointer whitespace-nowrap ${
+                    isActive ? 'is-active' : ''
                   }`}
                 >
                   {item.label}
@@ -59,9 +57,9 @@ export default function Navigation() {
             })}
           </div>
 
-          <div className="ml-auto hidden items-center gap-3 sm:flex">
+          <div className="site-nav-controls hidden items-center sm:flex">
             <ThemeSwitcher />
-            <span className="text-[var(--text-muted)]/40">|</span>
+            <span className="site-nav-divider">|</span>
             <LocaleSwitcher />
           </div>
         </div>

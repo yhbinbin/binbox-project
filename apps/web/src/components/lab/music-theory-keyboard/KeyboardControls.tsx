@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useLocale } from "next-intl";
+import { ChevronRight } from "lucide-react";
 import {
   getRootNotes,
   deriveTriads,
@@ -20,8 +22,16 @@ interface KeyboardControlsProps {
 }
 
 export default function KeyboardControls({ defaultRootOctave = 3 }: KeyboardControlsProps) {
+  const locale = useLocale();
+  const isZh = locale.startsWith("zh");
   const rootNotes = useMemo(() => getRootNotes(defaultRootOctave), [defaultRootOctave]);
   const [selectedRoot, setSelectedRoot] = useState(rootNotes[0]);
+  const [openSections, setOpenSections] = useState({
+    triads: true,
+    sevenths: false,
+    western: false,
+    chinese: false,
+  });
   const { pressKeys, releaseAllKeys } = useKeyboardStore();
 
   const triads = useMemo(() => deriveTriads(selectedRoot), [selectedRoot]);
@@ -84,140 +94,235 @@ export default function KeyboardControls({ defaultRootOctave = 3 }: KeyboardCont
     }, seq.length * interval + 300);
   };
 
+  const toggleSection = (section: keyof typeof openSections) => {
+    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
+  };
+
   return (
-    <div className="flex flex-col gap-4">
-      <div className="rounded-3xl border border-[var(--border-default)] bg-[var(--bg-card)] p-4">
-        <div className="mb-3 text-sm uppercase tracking-[0.3em] text-[var(--text-muted)]">
-          根音选择
-        </div>
-        <div className="grid grid-cols-6 gap-2">
-          {rootNotes.map((note) => (
+    <aside className="theory-control-shell theory-surface-shell ui-panel ui-frame overflow-visible px-4 py-5 md:px-5">
+      <div className="mb-4 border-b border-[var(--border-default)] pb-3">
+        <p className="theory-panel-kicker text-xs uppercase tracking-[0.26em]">
+          {isZh ? "和声控制台" : "Harmony Rack"}
+        </p>
+        <p className="theory-panel-copy mt-1 text-sm">
+          {isZh
+            ? "先设定根音，再快速试听三和弦、七和弦与调式。"
+            : "Set a root first, then audition triads, sevenths, and modes from one rack."}
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        <section className="theory-control-block theory-sticky-panel theory-sticky-compact theory-surface-raised">
+          <div className="theory-control-label">
+            <span>{isZh ? "根音选择" : "Root Select"}</span>
+            <span>{selectedRoot.replace(/\d+$/, "")}</span>
+          </div>
+          <div className="theory-root-grid">
+            {rootNotes.map((note) => {
+              const noteLabel = note.replace(/\d+$/, "");
+              const isSelected = selectedRoot === note;
+              return (
+                <button
+                  key={note}
+                  type="button"
+                  onClick={() => setSelectedRoot(note)}
+                  className={`theory-root-button ${isSelected ? "theory-surface-dark-button is-active" : "theory-surface-raised"}`}
+                >
+                  {noteLabel}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="theory-control-block theory-surface-raised">
+          <div className="theory-control-label">
+            <span>{isZh ? "和弦库" : "Chord Bank"}</span>
+            <span>{isZh ? "Triad + 7th" : "Triad + 7th"}</span>
+          </div>
+
+          <div className="theory-list-section theory-surface-screen border border-[var(--border-default)]">
             <button
-              key={note}
-              onClick={() => setSelectedRoot(note)}
-              className={`cursor-pointer rounded-full border px-3 py-1 text-xs uppercase tracking-[0.2em] transition ${
-                selectedRoot === note
-                  ? "border-[var(--accent-primary)] bg-[var(--accent-primary)] text-[var(--bg-primary)]"
-                  : "border-[var(--border-default)] text-[var(--text-secondary)] hover:border-[var(--border-hover)]"
-              }`}
+              type="button"
+              className="theory-list-header theory-list-toggle"
+              onClick={() => toggleSection("triads")}
+              aria-expanded={openSections.triads}
             >
-              {note.replace(/\d+$/, "")}
+              <span>{isZh ? "三和弦" : "Triads"}</span>
+              <ChevronRight
+                aria-hidden="true"
+                className={`theory-list-chevron ${openSections.triads ? "is-open" : ""}`}
+              />
             </button>
-          ))}
-        </div>
-      </div>
+            {openSections.triads && <div className="theory-list-body">
+              {triads.map((chord) => (
+                <div key={chord.name} className="theory-list-row">
+                  <div className="theory-list-main">
+                    <div className="theory-list-inline">
+                      <p className="theory-list-title theory-chord-title">{chord.symbol}</p>
+                      <p className="theory-list-notes">{chord.notes.join(" - ")}</p>
+                    </div>
+                  </div>
+                  <div className="theory-list-actions">
+                    <button
+                      type="button"
+                      className="theory-action-button theory-surface-raised"
+                      onClick={() => handlePlayChord(chord.notesWithOctave)}
+                    >
+                      {isZh ? "齐奏" : "Play"}
+                    </button>
+                    <button
+                      type="button"
+                      className="theory-action-button theory-surface-raised"
+                      onClick={() => handlePlayArpeggio(chord.notesWithOctave)}
+                    >
+                      {isZh ? "分解" : "Arp"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>}
+          </div>
 
-      <div className="rounded-3xl border border-[var(--border-default)] bg-[var(--bg-card)] p-4">
-        <div className="mb-3 text-sm uppercase tracking-[0.3em] text-[var(--text-muted)]">
-          三和弦
-        </div>
-        <div className="flex flex-col gap-2">
-          {triads.map((chord) => (
-            <div key={chord.name} className="flex flex-wrap items-center justify-between gap-2 text-sm">
-              <div className="text-[var(--text-primary)]">{chord.symbol}</div>
-              <div className="font-mono text-[var(--text-muted)]">{chord.notes.join(" - ")}</div>
-              <div className="flex gap-1">
-                <button
-                  className="cursor-pointer rounded-full border border-[var(--border-default)] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)] transition hover:border-[var(--border-hover)]"
-                  onClick={() => handlePlayChord(chord.notesWithOctave)}
-                >
-                  齐奏
-                </button>
-                <button
-                  className="cursor-pointer rounded-full border border-[var(--border-default)] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)] transition hover:border-[var(--border-hover)]"
-                  onClick={() => handlePlayArpeggio(chord.notesWithOctave)}
-                >
-                  分解
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+          <div className="theory-list-section theory-surface-screen border border-[var(--border-default)]">
+            <button
+              type="button"
+              className="theory-list-header theory-list-toggle"
+              onClick={() => toggleSection("sevenths")}
+              aria-expanded={openSections.sevenths}
+            >
+              <span>{isZh ? "七和弦" : "Sevenths"}</span>
+              <ChevronRight
+                aria-hidden="true"
+                className={`theory-list-chevron ${openSections.sevenths ? "is-open" : ""}`}
+              />
+            </button>
+            {openSections.sevenths && <div className="theory-list-body">
+              {seventhChords.map((chord) => (
+                <div key={chord.name} className="theory-list-row">
+                  <div className="theory-list-main">
+                    <div className="theory-list-inline">
+                      <p className="theory-list-title theory-chord-title">{chord.symbol}</p>
+                      <p className="theory-list-notes">{chord.notes.join(" - ")}</p>
+                    </div>
+                  </div>
+                  <div className="theory-list-actions">
+                    <button
+                      type="button"
+                      className="theory-action-button theory-surface-raised"
+                      onClick={() => handlePlayChord(chord.notesWithOctave)}
+                    >
+                      {isZh ? "齐奏" : "Play"}
+                    </button>
+                    <button
+                      type="button"
+                      className="theory-action-button theory-surface-raised"
+                      onClick={() => handlePlayArpeggio(chord.notesWithOctave)}
+                    >
+                      {isZh ? "分解" : "Arp"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>}
+          </div>
+        </section>
 
-      <div className="rounded-3xl border border-[var(--border-default)] bg-[var(--bg-card)] p-4">
-        <div className="mb-3 text-sm uppercase tracking-[0.3em] text-[var(--text-muted)]">
-          七和弦
-        </div>
-        <div className="flex flex-col gap-2">
-          {seventhChords.map((chord) => (
-            <div key={chord.name} className="flex flex-wrap items-center justify-between gap-2 text-sm">
-              <div className="text-[var(--text-primary)]">{chord.symbol}</div>
-              <div className="font-mono text-[var(--text-muted)]">{chord.notes.join(" - ")}</div>
-              <div className="flex gap-1">
-                <button
-                  className="cursor-pointer rounded-full border border-[var(--border-default)] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)] transition hover:border-[var(--border-hover)]"
-                  onClick={() => handlePlayChord(chord.notesWithOctave)}
-                >
-                  齐奏
-                </button>
-                <button
-                  className="cursor-pointer rounded-full border border-[var(--border-default)] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)] transition hover:border-[var(--border-hover)]"
-                  onClick={() => handlePlayArpeggio(chord.notesWithOctave)}
-                >
-                  分解
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+        <section className="theory-control-block theory-surface-raised">
+          <div className="theory-control-label">
+            <span>{isZh ? "调式库" : "Mode Bank"}</span>
+            <span>{isZh ? "Western + CN" : "Western + CN"}</span>
+          </div>
 
-      <div className="rounded-3xl border border-[var(--border-default)] bg-[var(--bg-card)] p-4">
-        <div className="mb-3 text-sm uppercase tracking-[0.3em] text-[var(--text-muted)]">
-          七大中古调式
-        </div>
-        <div className="flex flex-col gap-2">
-          {westernModes.map((mode) => (
-            <div key={mode.symbol} className="flex flex-wrap items-center justify-between gap-2 text-sm">
-              <div className="text-[var(--text-primary)]">{mode.modeName}</div>
-              <div className="font-mono text-[var(--text-muted)]">{mode.notes.join(" - ")}</div>
-              <div className="flex gap-1">
-                <button
-                  className="cursor-pointer rounded-full border border-[var(--border-default)] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)] transition hover:border-[var(--border-hover)]"
-                  onClick={() => handlePlayMode(mode.notesWithOctave, false)}
-                >
-                  升序
-                </button>
-                <button
-                  className="cursor-pointer rounded-full border border-[var(--border-default)] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)] transition hover:border-[var(--border-hover)]"
-                  onClick={() => handlePlayMode(mode.notesWithOctave, true)}
-                >
-                  降序
-                </button>
-              </div>
+          <div className="grid gap-3 xl:grid-cols-1">
+            <div className="theory-list-section theory-surface-screen border border-[var(--border-default)]">
+              <button
+                type="button"
+                className="theory-list-header theory-list-toggle"
+                onClick={() => toggleSection("western")}
+                aria-expanded={openSections.western}
+              >
+                <span>{isZh ? "中古调式" : "Western Modes"}</span>
+                <ChevronRight
+                  aria-hidden="true"
+                  className={`theory-list-chevron ${openSections.western ? "is-open" : ""}`}
+                />
+              </button>
+              {openSections.western && <div className="theory-list-body">
+                {westernModes.map((mode) => (
+                  <div key={mode.symbol} className="theory-list-row">
+                    <div className="theory-list-main">
+                      <div className="theory-list-inline">
+                        <p className="theory-list-title theory-mode-title">{mode.modeName}</p>
+                        <p className="theory-list-notes">{mode.notes.join(" - ")}</p>
+                      </div>
+                    </div>
+                    <div className="theory-list-actions">
+                      <button
+                        type="button"
+                        className="theory-action-button theory-surface-raised"
+                        onClick={() => handlePlayMode(mode.notesWithOctave, false)}
+                      >
+                        {isZh ? "升序" : "Up"}
+                      </button>
+                      <button
+                        type="button"
+                        className="theory-action-button theory-surface-raised"
+                        onClick={() => handlePlayMode(mode.notesWithOctave, true)}
+                      >
+                        {isZh ? "降序" : "Down"}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>}
             </div>
-          ))}
-        </div>
-      </div>
 
-      <div className="rounded-3xl border border-[var(--border-default)] bg-[var(--bg-card)] p-4">
-        <div className="mb-3 text-sm uppercase tracking-[0.3em] text-[var(--text-muted)]">
-          中国传统五声调式
-        </div>
-        <div className="flex flex-col gap-2">
-          {chineseModes.map((mode) => (
-            <div key={mode.symbol} className="flex flex-wrap items-center justify-between gap-2 text-sm">
-              <div className="text-[var(--text-primary)]">{mode.modeName}</div>
-              <div className="font-mono text-[var(--text-muted)]">{mode.notes.join(" - ")}</div>
-              <div className="flex gap-1">
-                <button
-                  className="rounded-full border border-[var(--border-default)] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)] transition hover:border-[var(--border-hover)]"
-                  onClick={() => handlePlayMode(mode.notesWithOctave, false)}
-                >
-                  升序
-                </button>
-                <button
-                  className="rounded-full border border-[var(--border-default)] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)] transition hover:border-[var(--border-hover)]"
-                  onClick={() => handlePlayMode(mode.notesWithOctave, true)}
-                >
-                  降序
-                </button>
-              </div>
+            <div className="theory-list-section theory-surface-screen border border-[var(--border-default)]">
+              <button
+                type="button"
+                className="theory-list-header theory-list-toggle"
+                onClick={() => toggleSection("chinese")}
+                aria-expanded={openSections.chinese}
+              >
+                <span>{isZh ? "五声调式" : "Pentatonic Modes"}</span>
+                <ChevronRight
+                  aria-hidden="true"
+                  className={`theory-list-chevron ${openSections.chinese ? "is-open" : ""}`}
+                />
+              </button>
+              {openSections.chinese && <div className="theory-list-body">
+                {chineseModes.map((mode) => (
+                  <div key={mode.symbol} className="theory-list-row">
+                    <div className="theory-list-main">
+                      <div className="theory-list-inline">
+                        <p className="theory-list-title theory-mode-title">{mode.modeName}</p>
+                        <p className="theory-list-notes">{mode.notes.join(" - ")}</p>
+                      </div>
+                    </div>
+                    <div className="theory-list-actions">
+                      <button
+                        type="button"
+                        className="theory-action-button theory-surface-raised"
+                        onClick={() => handlePlayMode(mode.notesWithOctave, false)}
+                      >
+                        {isZh ? "升序" : "Up"}
+                      </button>
+                      <button
+                        type="button"
+                        className="theory-action-button theory-surface-raised"
+                        onClick={() => handlePlayMode(mode.notesWithOctave, true)}
+                      >
+                        {isZh ? "降序" : "Down"}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>}
             </div>
-          ))}
-        </div>
+          </div>
+        </section>
       </div>
-    </div>
+    </aside>
   );
 }

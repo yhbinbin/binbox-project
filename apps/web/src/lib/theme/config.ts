@@ -1,10 +1,32 @@
 // 主题类型定义
-export const themes = ['vaporwave', 'cnretro', 'y2k', 'win95', 'vintage'] as const;
+export const themes = ['vhs-tape', 'rom-cd'] as const;
 
 export type Theme = (typeof themes)[number];
 
 // 默认主题
-export const defaultTheme: Theme = 'vaporwave';
+export const defaultTheme: Theme = 'vhs-tape';
+
+const legacyThemeMap = {
+  vaporwave: 'vhs-tape',
+  cnretro: 'vhs-tape',
+  vintage: 'vhs-tape',
+  y2k: 'rom-cd',
+  win95: 'rom-cd',
+  'future-retro': 'vhs-tape',
+  'digital-future': 'rom-cd',
+  vinyl: 'vhs-tape',
+} as const;
+
+export const normalizeTheme = (value: string | null | undefined): Theme => {
+  if (!value) return defaultTheme;
+  if ((themes as readonly string[]).includes(value)) {
+    return value as Theme;
+  }
+  if (value in legacyThemeMap) {
+    return legacyThemeMap[value as keyof typeof legacyThemeMap];
+  }
+  return defaultTheme;
+};
 
 // 主题元数据
 export const themeMetadata: Record<Theme, {
@@ -14,42 +36,18 @@ export const themeMetadata: Record<Theme, {
   descriptionEn: string;
   icon: string;
 }> = {
-  vaporwave: {
-    name: '蒸汽波',
-    nameEn: 'Vaporwave',
-    description: '霓虹粉青，赛博美学',
-    descriptionEn: 'Neon pink & cyan, cyber aesthetics',
-    icon: '🌆',
+  'vhs-tape': {
+    name: 'VHS-Tape',
+    nameEn: 'VHS-Tape',
+    description: '蒸汽波、中式旧核与受损录像带质感',
+    descriptionEn: 'Vaporwave, CN retrocore, and damaged tape atmosphere',
+    icon: '📼',
   },
-  cnretro: {
-    name: '旧核',
-    nameEn: 'CN Retro',
-    description: '蓝玻璃红横幅，白瓷砖',
-    descriptionEn: 'Blue glass, red banner, tiles',
-    icon: '🏮',
-  },
-  y2k: {
-    name: '千禧',
-    nameEn: 'Y2K',
-    description: '科技蓝绿，金属极光',
-    descriptionEn: 'Tech blue-green, metallic aurora',
-    icon: '💿',
-  },
-  win95: {
-    name: '经典',
-    nameEn: 'Win95',
-    description: '灰色窗口，蓝天白云',
-    descriptionEn: 'Classic gray, blue sky',
-    icon: '🖥️',
-  },
-  vintage: {
-    name: '复古',
-    nameEn: 'Vintage',
-    description: '马卡龙色，意式优雅',
-    descriptionEn: 'Macaron tones, Italian elegance',
-    icon: '🎞️',
+  'rom-cd': {
+    name: 'ROM-CD',
+    nameEn: 'ROM-CD',
+    description: '冷蓝数码未来与 Win95 银灰设备壳',
+    descriptionEn: 'Cold digital future with Win95 silver chassis language',
+    icon: '💽',
   },
 };
-
-// 预留主题位置（未来扩展）
-// export const futureThemes = ['cyberpunk', 'synthwave', 'pastel', 'monochrome'] as const;

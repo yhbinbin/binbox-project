@@ -34,7 +34,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
         disabled={disabled}
         onClick={() => onCheckedChange(!checked)}
         className={cn(
-          "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 transition-colors",
+          "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center border-2 rounded-[var(--radius-indicator)] transition-[background-color,border-color,box-shadow,transform] [box-shadow:var(--panel-frame-shadow)]",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]",
           "disabled:cursor-not-allowed disabled:opacity-50",
           checked
@@ -48,7 +48,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
       >
         <span
           className={cn(
-            "pointer-events-none block h-4 w-4 rounded-full bg-white shadow-lg ring-0 transition-transform",
+            "pointer-events-none block h-4 w-4 rounded-[var(--radius-indicator)] bg-[var(--bg-elevated)] ring-0 transition-transform [box-shadow:var(--panel-shadow)]",
             checked ? "translate-x-5" : "translate-x-0.5"
           )}
         />

@@ -1,13 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import * as Tone from "tone";
 import {
   BreakbeatPattern,
   createBreakbeatEngine,
 } from "@/lib/audio/breakbeatEngine";
-import { DrumKitId } from "@/lib/audio/drumKits";
+import { drumKits, DrumKitId } from "@/lib/audio/drumKits";
 import { downloadMidi, exportPatternToMidi } from "@/lib/audio/midiExport";
 import ControlsPanel from "@/components/lab/breakbeat/ControlsPanel";
 import SequencerGrid from "@/components/lab/breakbeat/SequencerGrid";
@@ -25,6 +25,8 @@ const DEFAULT_SWING = 25;
 const DEFAULT_HUMANIZE = true;
 
 export default function BreakbeatGenerator() {
+  const locale = useLocale();
+  const isZh = locale.startsWith("zh");
   const t = useTranslations("lab.breakbeatGenerator");
   const engineRef = useRef<EngineRef>(null);
   const [pattern, setPattern] = useState<BreakbeatPattern>(createEmptyPattern());
@@ -128,6 +130,7 @@ export default function BreakbeatGenerator() {
     () => pattern.filter((step) => step.kick || step.snare || step.hat).length,
     [pattern]
   );
+  const currentKit = drumKits.find((kit) => kit.id === kitId);
 
   useEffect(() => {
     ensureEngine();
@@ -139,50 +142,131 @@ export default function BreakbeatGenerator() {
   }, [ensureEngine]);
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-3 rounded-3xl border border-[var(--border-default)] bg-[var(--bg-card)] p-6">
-        <p className="text-xs uppercase tracking-[0.4em] text-[var(--accent-secondary)]">
-          {t("eyebrow")}
-        </p>
-        <h1 className="text-3xl font-semibold uppercase tracking-[0.2em] text-[var(--accent-primary)]">
-          {t("title")}
-        </h1>
-        <p className="max-w-2xl text-sm text-[var(--text-secondary)]">
-          {t("description")}
-        </p>
-        <div className="text-xs uppercase tracking-[0.35em] text-[var(--text-muted)]">
-          {t("hitsLoaded", { count: filledSteps })}
+    <section className="breakbeat-shell breakbeat-surface-backdrop space-y-8">
+      <div className="breakbeat-ribbon" />
+
+      <header className="breakbeat-header breakbeat-surface-shell ui-panel ui-frame relative overflow-hidden px-6 py-7 md:px-8 md:py-9">
+        <div className="breakbeat-header-glow pointer-events-none absolute inset-x-0 bottom-0 h-24" />
+        <div className="relative z-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div className="space-y-3">
+            <p className="breakbeat-header-kicker text-xs uppercase tracking-[0.34em]">
+              {t("eyebrow")}
+            </p>
+            <div className="space-y-3">
+              <h1 className="breakbeat-header-title text-4xl font-semibold uppercase tracking-[0.08em] md:text-5xl">
+                {t("title")}
+              </h1>
+              <p className="breakbeat-header-copy max-w-3xl text-sm leading-relaxed md:text-base">
+                {t("description")}
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-2 text-right">
+            <p className="breakbeat-header-meta text-xs uppercase tracking-[0.3em]">
+              {isZh ? "节奏修订: RHYTHM_BUFFER_16" : "Rhythm Revision: RHYTHM_BUFFER_16"}
+            </p>
+            <div className="breakbeat-header-status text-xs uppercase tracking-[0.24em]">
+              <span className="breakbeat-status-dot" />
+              <span>{isPlaying ? (isZh ? "实时运行中" : "Live Playback") : (isZh ? "缓冲待命" : "Buffer Ready")}</span>
+            </div>
+          </div>
         </div>
-      </div>
+      </header>
 
-      <ControlsPanel
-        isPlaying={isPlaying}
-        tempo={tempo}
-        swing={swing}
-        humanize={humanize}
-        kitId={kitId}
-        onTogglePlay={handleTogglePlay}
-        onGenerate={handleGenerate}
-        onExportMidi={handleExportMidi}
-        onTempoChange={handleTempoChange}
-        onSwingChange={handleSwingChange}
-        onHumanizeChange={handleHumanizeChange}
-        onKitChange={handleKitChange}
-      />
-
-      <div className="rounded-3xl border border-[var(--border-default)] bg-[var(--bg-card)] p-6">
-        <SequencerGrid
-          pattern={pattern}
-          currentStep={currentStep}
-          onToggleStep={handleToggleStep}
+      <div className="grid gap-6 xl:grid-cols-[340px_minmax(0,1.55fr)]">
+        <ControlsPanel
+          isPlaying={isPlaying}
+          tempo={tempo}
+          swing={swing}
+          humanize={humanize}
+          kitId={kitId}
+          onTogglePlay={handleTogglePlay}
+          onGenerate={handleGenerate}
+          onExportMidi={handleExportMidi}
+          onTempoChange={handleTempoChange}
+          onSwingChange={handleSwingChange}
+          onHumanizeChange={handleHumanizeChange}
+          onKitChange={handleKitChange}
         />
+
+        <section className="breakbeat-sequencer-shell breakbeat-surface-shell ui-panel ui-frame overflow-hidden px-4 py-5 md:px-5">
+          <div className="mb-4 flex flex-col gap-2 border-b border-[var(--border-default)] pb-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="breakbeat-panel-kicker text-xs uppercase tracking-[0.26em]">
+                {isZh ? "鼓机矩阵" : "Drum Matrix"}
+              </p>
+              <p className="breakbeat-panel-copy mt-1 text-sm">
+                {isZh ? "16 步节奏格，逐行切换 Kick、Snare 与 Hat。" : "Sixteen-step groove grid for kick, snare, and hat toggling."}
+              </p>
+            </div>
+            <p className="breakbeat-panel-meta text-xs uppercase tracking-[0.24em]">
+              {isZh ? "网格模式 // 16-step sync" : "Grid Mode // 16-step sync"}
+            </p>
+          </div>
+
+          <SequencerGrid
+            pattern={pattern}
+            currentStep={currentStep}
+            onToggleStep={handleToggleStep}
+          />
+        </section>
       </div>
 
-      <div className="rounded-2xl border border-[var(--border-default)] bg-[var(--bg-card)] p-4 text-xs uppercase tracking-[0.3em] text-[var(--text-muted)]">
-        <p>
-          {t("grooveNote")}
-        </p>
-      </div>
-    </div>
+      <section className="breakbeat-monitor-shell breakbeat-surface-shell ui-panel ui-frame relative overflow-hidden px-4 py-4 md:px-6">
+        <div className="breakbeat-monitor-glow pointer-events-none absolute inset-x-0 top-0 h-24" />
+        <div className="relative z-10 space-y-4">
+          <div className="breakbeat-monitor-meta-row flex flex-col gap-3 border-b border-[var(--border-default)] pb-3 md:flex-row md:items-end md:justify-between">
+            <div className="space-y-1">
+              <p className="breakbeat-monitor-kicker text-xs uppercase tracking-[0.24em]">
+                {isZh ? "节奏监视总线" : "Rhythm Monitor Bus"}
+              </p>
+              <p className="breakbeat-monitor-copy text-xs uppercase tracking-[0.24em]">
+                {currentKit?.name ?? kitId}
+              </p>
+            </div>
+            <div className="breakbeat-monitor-stats flex flex-wrap gap-x-4 gap-y-1 md:justify-end">
+              <span>{`${isZh ? "激活步进" : "Active Step"} // ${currentStep !== null ? String(currentStep + 1).padStart(2, "0") : "--"}`}</span>
+              <span>{`${isZh ? "命中数" : "Filled Steps"} // ${filledSteps}`}</span>
+            </div>
+          </div>
+
+          <div className="breakbeat-monitor-screen breakbeat-surface-screen relative overflow-hidden border border-[var(--border-default)] px-4 py-5">
+            <div className="breakbeat-monitor-grid" />
+            <div className="breakbeat-monitor-columns">
+              {pattern.map((step, index) => {
+                const hits = Number(step.kick) + Number(step.snare) + Number(step.hat);
+                const isCurrent = currentStep === index;
+                return (
+                  <div
+                    key={`monitor-${index}`}
+                    className={`breakbeat-monitor-column ${isCurrent ? "is-current" : ""}`}
+                    style={{ height: `${Math.max(18, hits * 28)}px` }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="breakbeat-monitor-footer flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border-default)] pt-3">
+            <span>{t("hitsLoaded", { count: filledSteps })}</span>
+            <div className="breakbeat-monitor-footer-stats flex flex-wrap gap-4">
+              <span>{`Tempo // ${tempo} BPM`}</span>
+              <span>{`Swing // ${swing}%`}</span>
+              <span>{`Humanize // ${humanize ? "ON" : "OFF"}`}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="breakbeat-footer breakbeat-surface-shell ui-panel ui-frame px-4 py-4">
+        <div className="breakbeat-footer-row flex flex-col justify-between gap-3 text-xs uppercase tracking-[0.22em] md:flex-row md:items-center">
+          <p className="breakbeat-footer-note">{t("grooveNote")}</p>
+          <p className="breakbeat-footer-status">
+            {isZh ? "导出缓冲 // MIDI / Pattern / Grid" : "Export Buffer // MIDI / Pattern / Grid"}
+          </p>
+        </div>
+      </footer>
+    </section>
   );
 }

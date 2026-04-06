@@ -22,16 +22,16 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
       <input
         type="range"
         className={cn(
-          "w-full h-2 rounded-full appearance-none cursor-pointer",
-          "bg-[var(--input)] border border-[var(--input-border)]",
+          "w-full h-2 appearance-none cursor-pointer rounded-[var(--radius-indicator)]",
+          "bg-[var(--input)] border border-[var(--input-border)] [box-shadow:var(--input-shadow)]",
           "[&::-webkit-slider-thumb]:appearance-none",
           "[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4",
-          "[&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2",
+          "[&::-webkit-slider-thumb]:rounded-[var(--radius-indicator)] [&::-webkit-slider-thumb]:border-2",
           "[&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110",
           "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4",
-          "[&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2",
+          "[&::-moz-range-thumb]:rounded-[var(--radius-indicator)] [&::-moz-range-thumb]:border-2",
           "[&::-moz-range-thumb]:transition-transform [&::-moz-range-thumb]:hover:scale-110",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:[box-shadow:var(--focus-shadow)]",
           className
         )}
         style={{

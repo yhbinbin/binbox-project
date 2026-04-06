@@ -45,74 +45,96 @@ export default function ControlsPanel({
   const currentKit = drumKits.find((kit) => kit.id === kitId);
 
   return (
-    <div className="grid gap-6 rounded-3xl border border-[var(--border-default)] bg-[var(--bg-card)] p-6 md:grid-cols-[1.2fr_1fr]">
-      <div className="flex flex-wrap items-center gap-4">
-        <Button variant="default" onClick={onTogglePlay}>
-          {isPlaying ? t("stop") : t("play")}
-        </Button>
-        <Button variant="secondary" onClick={onGenerate}>
-          {t("generatePattern")}
-        </Button>
-        <Button variant="ghost" onClick={onExportMidi}>
-          {t("exportMidi")}
-        </Button>
-        <label className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-[var(--text-muted)]">
-          <span>{t("humanize")}</span>
-          <Switch
-            checked={humanize}
-            onCheckedChange={onHumanizeChange}
-            accentColor="secondary"
-          />
-        </label>
+    <aside className="breakbeat-control-shell breakbeat-surface-shell ui-panel ui-frame overflow-hidden px-4 py-5 md:px-5">
+      <div className="mb-4 border-b border-[var(--border-default)] pb-3">
+        <p className="breakbeat-panel-kicker text-xs uppercase tracking-[0.26em]">
+          Control Rack
+        </p>
       </div>
 
-      <div className="grid gap-5 text-xs uppercase tracking-[0.3em] text-[var(--text-muted)]">
-        <label className="space-y-3">
-          <span className="block">{t("tempo")}</span>
-          <div className="flex items-center gap-3">
-            <Slider
-              min={80}
-              max={180}
-              value={tempo}
-              onChange={(e) => onTempoChange(Number(e.target.value))}
-              accentColor="secondary"
-            />
-            <span className="min-w-[70px] text-right text-sm text-[var(--accent-secondary)]">
-              {tempo} BPM
-            </span>
+      <div className="breakbeat-control-stack">
+        <div className="breakbeat-control-block breakbeat-surface-raised">
+          <div className="breakbeat-control-label">
+            <span>Transport</span>
+            <span>{isPlaying ? "RUN" : "IDLE"}</span>
           </div>
-        </label>
-
-        <label className="space-y-3">
-          <span className="block">{t("swing")}</span>
-          <div className="flex items-center gap-3">
-            <Slider
-              min={0}
-              max={100}
-              value={swing}
-              onChange={(e) => onSwingChange(Number(e.target.value))}
-              accentColor="primary"
-            />
-            <span className="min-w-[70px] text-right text-sm text-[var(--accent-primary)]">
-              {swing}%
-            </span>
+          <div className="grid grid-cols-1 gap-3">
+            <Button className="breakbeat-rack-button breakbeat-rack-button-primary breakbeat-surface-dark-button" onClick={onTogglePlay}>
+              {isPlaying ? t("stop") : t("play")}
+            </Button>
+            <Button className="breakbeat-rack-button breakbeat-rack-button-secondary breakbeat-surface-raised" onClick={onGenerate}>
+              {t("generatePattern")}
+            </Button>
+            <Button className="breakbeat-rack-button breakbeat-rack-button-tertiary breakbeat-surface-dark-button" onClick={onExportMidi}>
+              {t("exportMidi")}
+            </Button>
           </div>
-        </label>
+        </div>
 
-        <div className="space-y-3">
-          <span className="block">{t("drumKit")}</span>
+        <div className="breakbeat-control-block breakbeat-surface-raised">
+          <div className="breakbeat-control-label">
+            <span>{t("tempo")}</span>
+            <span>{tempo} BPM</span>
+          </div>
+          <Slider
+            min={80}
+            max={180}
+            value={tempo}
+            onChange={(e) => onTempoChange(Number(e.target.value))}
+            accentColor="secondary"
+            className="breakbeat-slider"
+          />
+        </div>
+
+        <div className="breakbeat-control-block breakbeat-surface-raised">
+          <div className="breakbeat-control-label">
+            <span>{t("swing")}</span>
+            <span>{swing}%</span>
+          </div>
+          <Slider
+            min={0}
+            max={100}
+            value={swing}
+            onChange={(e) => onSwingChange(Number(e.target.value))}
+            accentColor="primary"
+            className="breakbeat-slider"
+          />
+        </div>
+
+        <div className="breakbeat-control-block breakbeat-surface-raised">
+          <div className="breakbeat-control-label">
+            <span>{t("drumKit")}</span>
+            <span>{currentKit?.id ?? kitId}</span>
+          </div>
           <Select
             value={kitId}
             onValueChange={(value) => onKitChange(value as DrumKitId)}
             options={kitOptions}
+            className="breakbeat-select breakbeat-surface-screen"
           />
           {currentKit && (
-            <p className="text-[10px] uppercase tracking-[0.25em] text-[var(--text-muted)]">
+            <p className="breakbeat-control-note">
               {currentKit.description}
             </p>
           )}
         </div>
+
+        <div className="breakbeat-control-block breakbeat-surface-raised">
+          <div className="breakbeat-control-label">
+            <span>{t("humanize")}</span>
+            <span>{humanize ? "ON" : "OFF"}</span>
+          </div>
+          <label className="breakbeat-humanize-row">
+            <span className="breakbeat-humanize-copy">{t("humanize")}</span>
+            <Switch
+              checked={humanize}
+              onCheckedChange={onHumanizeChange}
+              accentColor="secondary"
+              className="breakbeat-switch"
+            />
+          </label>
+        </div>
       </div>
-    </div>
+    </aside>
   );
 }

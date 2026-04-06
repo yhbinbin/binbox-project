@@ -241,3 +241,15 @@ npm run dev:api
 ```text
 git@github.com:yhbinbin/binbox-project.git
 ```
+
+## AI 协作说明
+
+给 Copilot、Codex、Claude、Cursor 等工具使用的项目协作说明书见：
+
+- `docs/AI_DEVELOPMENT_GUIDE.md`
+
+## UI 设计协作说明
+
+给 Stitch、Figma AI 等 UI 工具使用的页面结构说明见：
+
+- `docs/UI_STRUCTURE_FOR_DESIGN_TOOLS.md`

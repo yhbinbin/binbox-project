@@ -29,11 +29,11 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           onChange={(e) => onValueChange(e.target.value)}
           disabled={disabled}
           className={cn(
-            "w-full appearance-none rounded-xl border border-[var(--border-default)] bg-[var(--bg-card)] px-4 py-2.5 pr-10",
+            "w-full appearance-none border border-[var(--border-default)] bg-[var(--bg-card)] px-4 py-2.5 pr-10 rounded-[var(--radius-control)] [box-shadow:var(--input-shadow)]",
             "text-xs uppercase tracking-[0.2em] text-[var(--text-primary)]",
-            "transition-colors cursor-pointer",
-            "hover:border-[var(--border-hover)]",
-            "focus:outline-none focus:ring-2 focus:ring-[var(--ring)]",
+            "transition-[background-color,border-color,color,box-shadow] cursor-pointer",
+            "hover:border-[var(--border-hover)] hover:[box-shadow:var(--panel-frame-shadow)]",
+            "focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:[box-shadow:var(--focus-shadow)]",
             "disabled:cursor-not-allowed disabled:opacity-50",
             className
           )}

@@ -24,15 +24,21 @@ export default function SequencerGrid({
   return (
     <div className="space-y-4">
       {instrumentRows.map((row) => (
-        <div key={row.key} className="space-y-2">
-          <div className="flex items-center justify-between text-xs uppercase tracking-[0.35em] text-[var(--text-muted)]">
-            <span>{row.label}</span>
-            <span className="text-[10px] text-[var(--text-muted)] opacity-60">
+        <section
+          key={row.key}
+          className="breakbeat-row-shell breakbeat-surface-shell space-y-2.5 border border-[var(--border-default)] px-3 py-2"
+        >
+          <div className="breakbeat-row-bar flex items-center justify-between">
+            <span className="breakbeat-row-label text-xs uppercase tracking-[0.28em]">
+              {row.label}
+            </span>
+            <span className="breakbeat-row-key text-xs uppercase tracking-[0.22em]">
               {row.key.toUpperCase()}
             </span>
           </div>
+
           <div
-            className="grid gap-2"
+            className="breakbeat-row-grid grid gap-1"
             style={{ gridTemplateColumns: "repeat(16, minmax(0, 1fr))" }}
             aria-label={`${row.label} pattern`}
           >
@@ -44,32 +50,18 @@ export default function SequencerGrid({
                   type="button"
                   key={`${row.key}-${step}`}
                   onClick={() => onToggleStep(row.key, step)}
-                  className={`group relative h-10 rounded-lg border text-[10px] uppercase transition cursor-pointer ${
-                    isActive
-                      ? "border-[var(--accent-secondary)] bg-[var(--accent-secondary)]/30"
-                      : "border-[var(--border-default)] bg-[var(--bg-card)] hover:border-[var(--border-hover)]"
-                  } ${
-                    isCurrent
-                      ? "shadow-[0_0_16px_rgba(var(--accent-primary-rgb,255,123,217),0.65)]"
-                      : ""
-                  }`}
+                  data-instrument={row.key}
+                  className={`breakbeat-step-pad group relative cursor-pointer ${isActive ? "is-active" : ""} ${isCurrent ? "is-current" : ""}`}
                   aria-pressed={isActive}
                 >
-                  <span
-                    className={`absolute inset-0 rounded-lg transition ${
-                      isCurrent
-                        ? "animate-pulse border border-[var(--accent-primary)]/60"
-                        : ""
-                    }`}
-                  />
-                  <span className="relative text-[var(--text-muted)] group-hover:text-[var(--text-secondary)]">
-                    {step + 1}
+                  <span className={`breakbeat-step-screen ${isActive ? "is-active" : ""} ${isCurrent ? "is-current" : ""}`}>
+                    <span className="breakbeat-step-index">{step + 1}</span>
                   </span>
                 </button>
               );
             })}
           </div>
-        </div>
+        </section>
       ))}
     </div>
   );

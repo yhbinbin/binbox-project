@@ -11,7 +11,7 @@ export default async function MusicTheoryKeyboardPage({ params }: Props) {
   setRequestLocale(locale);
 
   return (
-    <Container className="py-16">
+    <Container className="max-w-[1180px] py-12 md:py-14">
       <MusicTheoryKeyboard />
     </Container>
   );

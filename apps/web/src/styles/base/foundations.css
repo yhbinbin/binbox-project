@@ -1,0 +1,123 @@
+@keyframes binbox-shell-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes binbox-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes binbox-text-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes binbox-signal-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+}
+
+html {
+  background-color: var(--bg-primary);
+  --binbox-shell-enter-duration: 420ms;
+  --binbox-card-enter-duration: 520ms;
+  --binbox-text-enter-duration: 360ms;
+  --binbox-stagger-step: 60ms;
+  --binbox-signal-pulse-duration: 2.4s;
+}
+
+body {
+  background-color: var(--bg-primary);
+  background-image: var(--gradient-bg);
+  color: var(--text-primary);
+  font-family: var(--font-body), system-ui, sans-serif;
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+}
+
+main {
+  position: relative;
+}
+
+.ui-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--panel-shadow);
+  backdrop-filter: blur(var(--panel-blur));
+}
+
+.ui-panel:hover {
+  box-shadow: var(--panel-shadow-hover);
+}
+
+.ui-frame {
+  box-shadow: var(--panel-frame-shadow);
+}
+
+.ui-ghost-border {
+  outline: 1px solid var(--ui-ghost-border);
+  outline-offset: -1px;
+}
+
+.ui-signal-ribbon {
+  position: relative;
+}
+
+.ui-signal-ribbon::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--accent-secondary),
+    var(--accent-primary),
+    var(--accent-tertiary)
+  );
+  opacity: 0.8;
+}
+
+/* Custom Slider Thumb Colors */
+[style*="--slider-accent"]::-webkit-slider-thumb {
+  background: var(--slider-accent);
+  border-color: var(--slider-accent);
+}
+[style*="--slider-accent"]::-moz-range-thumb {
+  background: var(--slider-accent);
+  border-color: var(--slider-accent);
+}
+
+/* Select dropdown styling for dark theme */
+select option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}

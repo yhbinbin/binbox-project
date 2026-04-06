@@ -73,6 +73,7 @@ const outerGradientColors = [
 ];
 
 export default function CircleOfFifths({ playMode = "root" }: CircleOfFifthsProps) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const outerKeysRef = useRef<KeyInfo[]>(outerKeysData.map((k) => ({ ...k })));
   const innerKeysRef = useRef<KeyInfo[]>(innerKeysData.map((k) => ({ ...k })));
@@ -87,6 +88,7 @@ export default function CircleOfFifths({ playMode = "root" }: CircleOfFifthsProp
     index: number | null;
   }>({ ring: null, index: null });
   const radiiRef = useRef({ outer: 220, inner: 130 });
+  const [theme, setTheme] = useState<"vhs-tape" | "rom-cd">("vhs-tape");
 
   const { pressKeys, releaseAllKeys } = useKeyboardStore();
   const outerKeys = outerKeysRef.current;
@@ -104,6 +106,45 @@ export default function CircleOfFifths({ playMode = "root" }: CircleOfFifthsProp
     const outerRadius = Math.min(centerX, centerY) - 20;
     const innerRadius = outerRadius * 0.58;
     radiiRef.current = { outer: outerRadius, inner: innerRadius };
+
+    const palette =
+      theme === "rom-cd"
+        ? {
+            backdrop: "#0e141a",
+            border: "#8ea6c1",
+            outerHover: "#32b8ff",
+            innerHover: "#7dff9b",
+            centerFill: "#101922",
+            centerText: "#cfe1f3",
+            outerText: "#eef5ff",
+            innerText: "#b9d0e6",
+            outer: [
+              "#123a63", "#154f7d", "#0c4c72", "#265b66", "#285053", "#324b49",
+              "#1d3a56", "#2b3f69", "#29385b", "#2e435b", "#29464d", "#244859",
+            ],
+            inner: [
+              "#101922", "#0f1c26", "#10212b", "#14222d", "#17212a", "#111a22",
+              "#121e27", "#12212a", "#13212b", "#101822", "#0f1821", "#101d27",
+            ],
+          }
+        : {
+            backdrop: "#0f1411",
+            border: "#8aa59a",
+            outerHover: "#60f8ff",
+            innerHover: "#ffe178",
+            centerFill: "#101612",
+            centerText: "#dcffc7",
+            outerText: "#f3f7ff",
+            innerText: "#d5ffc2",
+            outer: [
+              "#2f3c48", "#38454c", "#324149", "#414952", "#3d424f", "#353d48",
+              "#2f3642", "#39424b", "#34404a", "#373d46", "#3a434c", "#313742",
+            ],
+            inner: [
+              "#142118", "#15241a", "#17261c", "#15231a", "#16211a", "#131d16",
+              "#15221a", "#142019", "#15211a", "#131d17", "#142119", "#15231b",
+            ],
+          };
 
     const drawSector = (
       startAngle: number,
@@ -127,7 +168,7 @@ export default function CircleOfFifths({ playMode = "root" }: CircleOfFifthsProp
       ctx.closePath();
       ctx.fillStyle = color;
       ctx.fill();
-      ctx.strokeStyle = isHovered ? "#f472b6" : "#52525b";
+      ctx.strokeStyle = isHovered ? palette.outerHover : palette.border;
       ctx.lineWidth = 1;
       ctx.stroke();
     };
@@ -135,7 +176,7 @@ export default function CircleOfFifths({ playMode = "root" }: CircleOfFifthsProp
     const drawCircle = (radius: number) => {
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-      ctx.strokeStyle = "#71717a";
+      ctx.strokeStyle = palette.border;
       ctx.lineWidth = 2;
       ctx.stroke();
     };
@@ -149,7 +190,7 @@ export default function CircleOfFifths({ playMode = "root" }: CircleOfFifthsProp
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
         ctx.lineTo(x, y);
-        ctx.strokeStyle = "#52525b";
+        ctx.strokeStyle = palette.border;
         ctx.lineWidth = 1;
         ctx.stroke();
       });
@@ -171,14 +212,8 @@ export default function CircleOfFifths({ playMode = "root" }: CircleOfFifthsProp
       });
     };
 
-    ctx.fillStyle = "#111827";
+    ctx.fillStyle = palette.backdrop;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const outerColors = [
-      "#1f2937", "#111827", "#0f172a", "#1e1b4b", "#1f2937", "#0f172a",
-      "#111827", "#1f2937", "#0f172a", "#1e1b4b", "#111827", "#1f2937",
-    ];
-    const innerColors = new Array(12).fill("#0f172a");
 
     outerKeys.forEach((_, index) => {
       const startAngle =
@@ -186,13 +221,13 @@ export default function CircleOfFifths({ playMode = "root" }: CircleOfFifthsProp
       const endAngle = startAngle + (Math.PI * 2) / outerKeys.length;
       const isHovered =
         hovered.ring === "outer" && hovered.index === index;
-      const baseColor = outerGradientColors[index] || outerColors[index];
+      const baseColor = palette.outer[index] || outerGradientColors[index];
       drawSector(
         startAngle,
         endAngle,
         innerRadius,
         outerRadius,
-        isHovered ? "#f472b6" : baseColor,
+        isHovered ? palette.outerHover : baseColor,
         isHovered
       );
     });
@@ -208,7 +243,7 @@ export default function CircleOfFifths({ playMode = "root" }: CircleOfFifthsProp
         endAngle,
         0,
         innerRadius,
-        isHovered ? "#60f8ff" : innerColors[index],
+        isHovered ? palette.innerHover : palette.inner[index],
         isHovered
       );
     });
@@ -217,27 +252,47 @@ export default function CircleOfFifths({ playMode = "root" }: CircleOfFifthsProp
     drawCircle(innerRadius);
     drawLines(outerRadius, Math.PI / 12);
 
-    drawKeys(outerKeys, outerRadius * 0.78, 16, "#ffffff");
-    drawKeys(innerKeys, innerRadius * 0.65, 14, "#d4d4d8");
+    drawKeys(outerKeys, outerRadius * 0.78, 16, palette.outerText);
+    drawKeys(innerKeys, innerRadius * 0.65, 14, palette.innerText);
 
     ctx.beginPath();
     ctx.arc(centerX, centerY, 30, 0, Math.PI * 2);
-    ctx.fillStyle = "#0b1020";
+    ctx.fillStyle = palette.centerFill;
     ctx.fill();
-    ctx.strokeStyle = "#52525b";
+    ctx.strokeStyle = palette.border;
     ctx.lineWidth = 2;
     ctx.stroke();
 
     ctx.font = "bold 12px Arial";
-    ctx.fillStyle = "#94a3b8";
+    ctx.fillStyle = palette.centerText;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText("五度圈", centerX, centerY);
-  }, [hovered, outerKeys, innerKeys]);
+  }, [hovered, innerKeys, outerKeys, theme]);
 
   useEffect(() => {
     drawCircleOfFifths();
   }, [drawCircleOfFifths]);
+
+  useEffect(() => {
+    const updateTheme = () => {
+      const nextTheme =
+        document.documentElement.getAttribute("data-theme") === "rom-cd"
+          ? "rom-cd"
+          : "vhs-tape";
+      setTheme(nextTheme);
+    };
+
+    updateTheme();
+
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const getKeyFromPoint = (
     mouseX: number,
@@ -282,11 +337,20 @@ export default function CircleOfFifths({ playMode = "root" }: CircleOfFifthsProp
       : null;
 
     if (foundKey && hit) {
+      const wrapperRect = wrapperRef.current?.getBoundingClientRect();
+      const tooltipWidth = 72;
+      const tooltipHeight = 88;
+      const margin = 12;
+      const localX = wrapperRect ? event.clientX - wrapperRect.left : mouseX;
+      const localY = wrapperRect ? event.clientY - wrapperRect.top : mouseY;
+      const maxX = wrapperRect ? wrapperRect.width - tooltipWidth - margin : localX;
+      const maxY = wrapperRect ? wrapperRect.height - tooltipHeight - margin : localY;
+
       setHovered({ ring: hit.ring, index: hit.index });
       setTooltip({
         visible: true,
-        x: event.clientX,
-        y: event.clientY,
+        x: Math.max(margin, Math.min(localX + 14, maxX)),
+        y: Math.max(margin, Math.min(localY + 14, maxY)),
         content: foundKey.description,
       });
     } else {
@@ -368,25 +432,28 @@ export default function CircleOfFifths({ playMode = "root" }: CircleOfFifthsProp
   };
 
   return (
-    <div className="relative flex items-center justify-center">
+    <div ref={wrapperRef} className="relative flex items-center justify-center overflow-visible">
       <canvas
         ref={canvasRef}
         width={420}
         height={420}
-        className="w-full max-w-[420px] cursor-pointer rounded-2xl"
+        className="w-full max-w-[420px] cursor-pointer rounded-[var(--radius-panel)]"
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
       />
       {tooltip.visible && (
         <div
-          className="fixed z-50 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--text-primary)] shadow-lg whitespace-pre-line pointer-events-none"
+          className="theory-circle-tooltip absolute z-30 border border-[var(--border-default)] px-3 py-2 text-sm shadow-lg pointer-events-none"
           style={{
-            left: tooltip.x + 15,
-            top: tooltip.y + 15,
+            left: tooltip.x,
+            top: tooltip.y,
+            width: "86px",
           }}
         >
-          {tooltip.content}
+          {tooltip.content.split("\n").map((line) => (
+            <div key={line}>{line}</div>
+          ))}
         </div>
       )}
     </div>

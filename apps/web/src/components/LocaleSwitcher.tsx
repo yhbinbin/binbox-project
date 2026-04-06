@@ -2,7 +2,7 @@
 
 import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from '@/i18n/navigation';
-import { locales, localeNames, Locale } from '@/i18n/config';
+import { locales, Locale } from '@/i18n/config';
 
 export default function LocaleSwitcher() {
   const locale = useLocale() as Locale;
@@ -14,24 +14,20 @@ export default function LocaleSwitcher() {
   };
 
   return (
-    <div className="flex items-center gap-1">
-      {locales.map((l, index) => (
-        <span key={l} className="flex items-center">
-          <button
-            onClick={() => handleChange(l)}
-            className={`cursor-pointer px-1.5 py-0.5 text-xs uppercase tracking-wider transition hover:text-[var(--accent-primary)] ${
-              locale === l
-                ? 'text-[var(--accent-primary)] font-medium'
-                : 'text-[var(--text-muted)]'
-            }`}
-          >
-            {localeNames[l]}
-          </button>
-          {index < locales.length - 1 && (
-            <span className="text-[var(--text-muted)]/50 text-xs">/</span>
-          )}
-        </span>
-      ))}
-    </div>
+    <label className="site-locale-select-shell">
+      <span className="sr-only">{locale === 'zh' ? '切换语言' : 'Switch language'}</span>
+      <select
+        aria-label={locale === 'zh' ? '切换语言' : 'Switch language'}
+        className="site-locale-select"
+        value={locale}
+        onChange={(event) => handleChange(event.target.value as Locale)}
+      >
+        {locales.map((item) => (
+          <option key={item} value={item}>
+            {item === 'zh' ? '中文' : 'English'}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }

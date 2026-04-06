@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Theme, defaultTheme } from '@/lib/theme/config';
+import { Theme, defaultTheme, normalizeTheme } from '@/lib/theme/config';
 
 interface ThemeState {
   theme: Theme;
@@ -12,11 +12,12 @@ export const useThemeStore = create<ThemeState>()(
     (set) => ({
       theme: defaultTheme,
       setTheme: (theme) => {
+        const normalizedTheme = normalizeTheme(theme);
         // 更新 DOM 属性
         if (typeof document !== 'undefined') {
-          document.documentElement.setAttribute('data-theme', theme);
+          document.documentElement.setAttribute('data-theme', normalizedTheme);
         }
-        set({ theme });
+        set({ theme: normalizedTheme });
       },
     }),
     {
@@ -24,7 +25,9 @@ export const useThemeStore = create<ThemeState>()(
       onRehydrateStorage: () => (state) => {
         // 在客户端重新加载时应用主题
         if (state && typeof document !== 'undefined') {
-          document.documentElement.setAttribute('data-theme', state.theme);
+          const normalizedTheme = normalizeTheme(state.theme);
+          document.documentElement.setAttribute('data-theme', normalizedTheme);
+          state.theme = normalizedTheme;
         }
       },
     }

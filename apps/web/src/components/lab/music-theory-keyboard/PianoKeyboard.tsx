@@ -51,8 +51,9 @@ function isNoteInSet(noteSet: Set<string>, note: string): boolean {
   return false;
 }
 
-const OCTAVE_WIDTH = 7 * 40;
-const WHITE_KEY_WIDTH = 40;
+const MAX_WHITE_KEY_WIDTH = 37;
+const MIN_WHITE_KEY_WIDTH = 37;
+const KEYBOARD_SCREEN_PADDING = 24;
 
 interface PianoKeyboardProps {
   defaultOctaves?: number;
@@ -73,39 +74,57 @@ export default function PianoKeyboard({
   const [keyboardRange, setKeyboardRange] = useState(() => ({
     startOctave: defaultStartOctave,
     visibleOctaves: defaultOctaves,
+    whiteKeyWidth: MAX_WHITE_KEY_WIDTH,
   }));
   const containerRef = useRef<HTMLDivElement>(null);
+  const keyboardBedRef = useRef<HTMLDivElement>(null);
 
-  const { startOctave, visibleOctaves } = keyboardRange;
+  const { startOctave, visibleOctaves, whiteKeyWidth } = keyboardRange;
 
   const calculateKeyboardRange = useCallback(
     (containerWidth: number) => {
-      const availableWidth = Math.max(0, containerWidth - 120);
-      const maxOctaves = Math.floor(availableWidth / OCTAVE_WIDTH);
-      const octaves = Math.max(1, Math.min(maxOctaves, 7));
-      const halfOctaves = Math.floor(octaves / 2);
-      const nextStartOctave = Math.max(
-        0,
-        Math.min(centerOctave - halfOctaves, 7 - octaves)
-      );
+      const availableWidth = Math.max(0, containerWidth - KEYBOARD_SCREEN_PADDING);
+      const getWhiteKeyWidth = (octaves: number) =>
+        Math.min(
+          MAX_WHITE_KEY_WIDTH,
+          Math.max(MIN_WHITE_KEY_WIDTH, availableWidth / (octaves * 7))
+        );
+
+      if (availableWidth >= MIN_WHITE_KEY_WIDTH * 7 * 4) {
+        return {
+          startOctave: defaultStartOctave,
+          visibleOctaves: 4,
+          whiteKeyWidth: getWhiteKeyWidth(4),
+        };
+      }
+
+      if (availableWidth >= MIN_WHITE_KEY_WIDTH * 7 * 3) {
+        return {
+          startOctave: defaultStartOctave,
+          visibleOctaves: 3,
+          whiteKeyWidth: getWhiteKeyWidth(3),
+        };
+      }
 
       return {
-        startOctave: nextStartOctave,
-        visibleOctaves: octaves,
+        startOctave: Math.max(0, Math.min(centerOctave, 6)),
+        visibleOctaves: 2,
+        whiteKeyWidth: getWhiteKeyWidth(2),
       };
     },
-    [centerOctave]
+    [centerOctave, defaultStartOctave]
   );
 
   useLayoutEffect(() => {
     const updateVisibleOctaves = () => {
-      if (!containerRef.current) return;
+      if (!keyboardBedRef.current) return;
 
-      const nextRange = calculateKeyboardRange(containerRef.current.clientWidth);
+      const nextRange = calculateKeyboardRange(keyboardBedRef.current.clientWidth);
       setKeyboardRange((prevRange) => {
         if (
           prevRange.startOctave === nextRange.startOctave &&
-          prevRange.visibleOctaves === nextRange.visibleOctaves
+          prevRange.visibleOctaves === nextRange.visibleOctaves &&
+          Math.abs(prevRange.whiteKeyWidth - nextRange.whiteKeyWidth) < 0.1
         ) {
           return prevRange;
         }
@@ -115,9 +134,9 @@ export default function PianoKeyboard({
 
     updateVisibleOctaves();
 
-    if (typeof ResizeObserver !== "undefined" && containerRef.current) {
+    if (typeof ResizeObserver !== "undefined" && keyboardBedRef.current) {
       const observer = new ResizeObserver(updateVisibleOctaves);
-      observer.observe(containerRef.current);
+      observer.observe(keyboardBedRef.current);
       return () => observer.disconnect();
     }
 
@@ -135,12 +154,17 @@ export default function PianoKeyboard({
     }
   };
 
+  const blackKeyWidth = whiteKeyWidth * 0.62;
+  const whiteKeyHeight = whiteKeyWidth * 3.55;
+  const blackKeyHeight = whiteKeyHeight * 0.62;
+  const blackKeyOffset = whiteKeyWidth - blackKeyWidth / 2;
+
   const getWhiteKeyClassName = (note: string) => {
     const isPressed = isNoteInSet(pressedKeys, note);
     const isHighlighted = isNoteInSet(highlightedKeys, note);
 
     let className =
-      "relative h-32 w-10 cursor-pointer rounded-b-md border border-zinc-300 transition-colors flex items-end justify-center pb-1 ";
+      "relative cursor-pointer rounded-b-md border border-zinc-300 transition-colors flex items-end justify-center pb-1 ";
 
     if (isPressed) {
       className += "bg-blue-400";
@@ -158,7 +182,7 @@ export default function PianoKeyboard({
     const isHighlighted = isNoteInSet(highlightedKeys, note);
 
     let className =
-      "absolute z-10 h-20 w-6 cursor-pointer rounded-b-md transition-colors ";
+      "absolute z-10 cursor-pointer rounded-b-md transition-colors ";
 
     if (isPressed) {
       className += "bg-blue-500";
@@ -197,6 +221,7 @@ export default function PianoKeyboard({
           <button
             key={note}
             className={getWhiteKeyClassName(note)}
+            style={{ width: `${whiteKeyWidth}px`, height: `${whiteKeyHeight}px` }}
             title={note}
             onMouseDown={() => handleKeyDown(note)}
             onMouseUp={() => handleKeyUp(note)}
@@ -218,7 +243,11 @@ export default function PianoKeyboard({
           <button
             key={note}
             className={getBlackKeyClassName(note)}
-            style={{ left: `${pos * WHITE_KEY_WIDTH + 27}px` }}
+            style={{
+              left: `${pos * whiteKeyWidth + blackKeyOffset}px`,
+              width: `${blackKeyWidth}px`,
+              height: `${blackKeyHeight}px`,
+            }}
             title={note}
             onMouseDown={() => handleKeyDown(note)}
             onMouseUp={() => handleKeyUp(note)}
@@ -233,27 +262,36 @@ export default function PianoKeyboard({
 
   return (
     <div className="w-full" ref={containerRef}>
-      <div className="mb-3 flex items-center gap-3">
+      <div className="theory-keyboard-toolbar mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
         <button
+          type="button"
           onClick={() => shiftOctave(-1)}
-          className="cursor-pointer rounded-full border border-[var(--border-default)] px-3 py-1 text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)] transition hover:border-[var(--border-hover)]"
+          className="theory-octave-button theory-surface-raised cursor-pointer border border-[var(--border-default)] px-3 py-2 text-xs uppercase tracking-[0.22em] transition"
         >
-          ◀ Oct-
+          ◀ {`Oct-`}
         </button>
         <button
+          type="button"
           onClick={() => shiftOctave(1)}
-          className="cursor-pointer rounded-full border border-[var(--border-default)] px-3 py-1 text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)] transition hover:border-[var(--border-hover)]"
+          className="theory-octave-button theory-surface-raised cursor-pointer border border-[var(--border-default)] px-3 py-2 text-xs uppercase tracking-[0.22em] transition"
         >
-          Oct+ ▶
+          {`Oct+`} ▶
         </button>
-        <div className="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">
+        </div>
+        <div className="theory-keyboard-range text-xs uppercase tracking-[0.22em]">
           {startOctave} - {startOctave + visibleOctaves - 1}
         </div>
       </div>
-      <div className="flex gap-0.5 overflow-hidden">
+      <div
+        ref={keyboardBedRef}
+        className="theory-keyboard-bed theory-surface-screen border border-[var(--border-default)] px-4 py-4 overflow-hidden"
+      >
+        <div className="flex gap-0 overflow-hidden">
         {Array.from({ length: visibleOctaves }, (_, i) =>
           renderOctave(startOctave + i)
         )}
+        </div>
       </div>
     </div>
   );

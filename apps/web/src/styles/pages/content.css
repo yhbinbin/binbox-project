@@ -1,0 +1,178 @@
+.about-shell {
+  position: relative;
+  animation: binbox-shell-enter var(--binbox-shell-enter-duration) ease-out both;
+}
+
+.about-ribbon {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent);
+  opacity: 0.5;
+  animation: binbox-signal-pulse var(--binbox-signal-pulse-duration) ease-in-out infinite;
+}
+
+.about-aside,
+.about-contact-ledger {
+  position: relative;
+  animation: binbox-card-enter var(--binbox-card-enter-duration) ease-out both;
+}
+
+.about-header,
+.about-reading,
+.about-focus {
+  animation: binbox-text-enter var(--binbox-text-enter-duration) ease-out both;
+}
+
+.about-aside {
+  animation-delay: var(--binbox-stagger-step);
+}
+
+.about-reading {
+  animation-delay: calc(var(--binbox-stagger-step) * 2);
+}
+
+.about-focus {
+  animation-delay: calc(var(--binbox-stagger-step) * 3);
+}
+
+.about-contact-ledger {
+  animation-delay: calc(var(--binbox-stagger-step) * 4);
+}
+
+.about-paragraph-block {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 4rem minmax(0, 1fr);
+}
+
+.about-paragraph-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--text-muted);
+  padding-top: 0.35rem;
+}
+
+.about-contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.about-contact-label {
+  min-width: 4.5rem;
+  color: var(--text-muted);
+}
+
+.archive-aside {
+  position: relative;
+}
+
+[data-theme="vhs-tape"] .about-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.018) 0px,
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  opacity: 0.24;
+}
+
+[data-theme="vhs-tape"] .about-aside,
+[data-theme="vhs-tape"] .about-contact-ledger,
+[data-theme="vhs-tape"] .archive-aside {
+  backdrop-filter: blur(var(--panel-blur));
+  background:
+    linear-gradient(180deg, rgba(70, 31, 66, 0.82), rgba(36, 18, 36, 0.9));
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.04),
+    inset -1px -1px 0 rgba(7, 2, 7, 0.42),
+    0 12px 30px rgba(0, 0, 0, 0.22);
+}
+
+[data-theme="vhs-tape"] .about-contact-ledger h2 {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.8rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px dashed rgba(255, 209, 242, 0.24);
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 42%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.014) 0px,
+      rgba(255, 255, 255, 0.014) 1px,
+      transparent 1px,
+      transparent 9px
+    ),
+    linear-gradient(180deg, rgba(70, 31, 66, 0.82), rgba(36, 18, 36, 0.9));
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.03),
+    inset -1px -1px 0 rgba(7, 2, 7, 0.28),
+    2px 2px 0 rgba(0, 0, 0, 0.14);
+  transform: rotate(-0.25deg);
+}
+
+[data-theme="rom-cd"] .about-aside,
+[data-theme="rom-cd"] .about-contact-ledger,
+[data-theme="rom-cd"] .archive-aside {
+  box-shadow: inset 1px 1px 0 var(--ui-bevel-light), inset -1px -1px 0 var(--ui-bevel-dark);
+}
+
+[data-theme="rom-cd"] .about-aside,
+[data-theme="rom-cd"] .about-contact-ledger {
+  background:
+    linear-gradient(180deg, rgba(214, 218, 223, 0.96), rgba(178, 184, 191, 0.94));
+}
+
+[data-theme="rom-cd"] .archive-aside {
+  background:
+    linear-gradient(180deg, rgba(214, 218, 223, 0.96), rgba(178, 184, 191, 0.94));
+}
+
+[data-theme="rom-cd"] .about-aside p,
+[data-theme="rom-cd"] .about-contact-ledger,
+[data-theme="rom-cd"] .about-contact-ledger a,
+[data-theme="rom-cd"] .about-contact-ledger .about-contact-label,
+[data-theme="rom-cd"] .archive-aside p {
+  color: var(--text-panel-strong);
+}
+
+[data-theme="rom-cd"] .about-aside .text-\[var\(--text-muted\)\],
+[data-theme="rom-cd"] .about-contact-ledger .text-\[var\(--accent-secondary\)\],
+[data-theme="rom-cd"] .about-contact-ledger .text-\[var\(--text-secondary\)\],
+[data-theme="rom-cd"] .archive-aside .text-\[var\(--text-muted\)\],
+[data-theme="rom-cd"] .archive-aside .text-\[var\(--accent-secondary\)\] {
+  color: var(--text-panel-accent);
+}
+
+[data-theme="vhs-tape"] .archive-tag,
+[data-theme="vhs-tape"] .archive-load-more,
+[data-theme="vhs-tape"] .music-tag,
+[data-theme="vhs-tape"] .music-tag-key,
+[data-theme="vhs-tape"] .store-tag,
+[data-theme="vhs-tape"] .store-cta-chip,
+[data-theme="vhs-tape"] .about-contact-ledger h2,
+[data-theme="vhs-tape"] .music-status-panel {
+  color: var(--text-panel-strong);
+}
+
+@media (max-width: 767px) {
+  .about-paragraph-block {
+    grid-template-columns: 1fr;
+  }
+
+  .about-paragraph-meta {
+    padding-top: 0;
+  }
+}

@@ -1,0 +1,286 @@
+.store-shell,
+.store-detail-shell {
+  position: relative;
+  animation: binbox-shell-enter var(--binbox-shell-enter-duration) ease-out both;
+}
+
+.store-header,
+.store-artwork-shell,
+.store-detail-cover,
+.store-detail-summary,
+.store-detail-spec,
+.store-signal-profile,
+.store-stat-card,
+.store-item-row {
+  position: relative;
+}
+
+.store-header-glow {
+  background:
+    radial-gradient(circle at 24% 45%, color-mix(in srgb, var(--accent-tertiary) 20%, transparent), transparent 22%),
+    radial-gradient(circle at 72% 42%, color-mix(in srgb, var(--accent-primary) 18%, transparent), transparent 26%);
+  filter: blur(18px);
+}
+
+.store-ribbon {
+  position: relative;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--accent-tertiary), transparent);
+  opacity: 0.65;
+}
+
+.store-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.store-status-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--radius-indicator);
+  background: var(--accent-secondary);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent-secondary) 70%, transparent);
+}
+
+.store-artwork-shell {
+  min-height: 16rem;
+}
+
+.store-card {
+  animation: binbox-card-enter var(--binbox-card-enter-duration) ease-out both;
+}
+
+.store-card:nth-child(2) { animation-delay: var(--binbox-stagger-step); }
+.store-card:nth-child(3) { animation-delay: calc(var(--binbox-stagger-step) * 2); }
+.store-card:nth-child(4) { animation-delay: calc(var(--binbox-stagger-step) * 3); }
+.store-card:nth-child(5) { animation-delay: calc(var(--binbox-stagger-step) * 4); }
+.store-card:nth-child(6) { animation-delay: calc(var(--binbox-stagger-step) * 5); }
+
+.store-artwork-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 54%, color-mix(in srgb, var(--bg-primary) 92%, transparent) 100%);
+}
+
+.store-catalog-tag,
+.store-detail-label {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--accent-tertiary) 35%, transparent);
+  background: color-mix(in srgb, var(--bg-overlay) 82%, transparent);
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.store-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.7rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--border-default);
+  background: color-mix(in srgb, var(--bg-panel-soft) 74%, transparent);
+  color: var(--text-secondary);
+}
+
+.store-progress,
+.store-stat-line {
+  height: 0.35rem;
+  background: color-mix(in srgb, var(--bg-panel-soft) 88%, transparent);
+}
+
+.store-progress-fill,
+.store-stat-line-fill {
+  height: 100%;
+  width: 66%;
+  background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+}
+
+.store-cta-chip,
+.store-detail-buy {
+  border: 1px solid var(--border-strong);
+  background: var(--button-fill-primary);
+  color: var(--text-inverse);
+}
+
+.store-detail-visual {
+  position: relative;
+}
+
+.store-detail-record {
+  position: absolute;
+  right: -2.5rem;
+  top: 50%;
+  width: 88%;
+  height: 88%;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  opacity: 0.82;
+  background:
+    radial-gradient(circle at center, transparent 0 14%, rgba(255,255,255,0.08) 14% 15%, transparent 15%),
+    repeating-radial-gradient(circle, var(--surface-container-lowest) 0px, var(--surface-container-lowest) 2px, var(--surface-container-low) 3px, var(--surface-container-lowest) 4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+}
+
+.store-detail-cover {
+  z-index: 1;
+}
+
+.store-item-row {
+  transition: transform var(--motion-fast) ease, box-shadow var(--motion-fast) ease;
+}
+
+.store-item-row:hover {
+  transform: translateY(-1px);
+}
+
+[data-theme="vhs-tape"] .store-shell::before,
+[data-theme="vhs-tape"] .store-detail-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.018) 0px,
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  opacity: 0.28;
+}
+
+[data-theme="vhs-tape"] .store-header,
+[data-theme="vhs-tape"] .store-artwork-shell,
+[data-theme="vhs-tape"] .store-detail-cover,
+[data-theme="vhs-tape"] .store-detail-summary,
+[data-theme="vhs-tape"] .store-detail-spec,
+[data-theme="vhs-tape"] .store-signal-profile,
+[data-theme="vhs-tape"] .store-stat-card,
+[data-theme="vhs-tape"] .store-item-row {
+  backdrop-filter: blur(var(--panel-blur));
+  background:
+    linear-gradient(180deg, rgba(53, 23, 51, 0.9), rgba(24, 9, 24, 0.92));
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.05),
+    inset -1px -1px 0 rgba(7, 2, 7, 0.45),
+    0 16px 36px rgba(0, 0, 0, 0.26);
+}
+
+[data-theme="vhs-tape"] .store-status-dot {
+  border-radius: 0;
+}
+
+[data-theme="vhs-tape"] .store-catalog-tag,
+[data-theme="vhs-tape"] .store-detail-label,
+[data-theme="vhs-tape"] .store-cta-chip,
+[data-theme="vhs-tape"] .store-detail-buy {
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 42%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.014) 0px,
+      rgba(255, 255, 255, 0.014) 1px,
+      transparent 1px,
+      transparent 9px
+    ),
+    linear-gradient(180deg, rgba(70, 31, 66, 0.82), rgba(36, 18, 36, 0.9));
+  border-style: dashed;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.04),
+    inset -1px -1px 0 rgba(7, 2, 7, 0.38),
+    2px 2px 0 rgba(0, 0, 0, 0.16);
+}
+
+[data-theme="vhs-tape"] .store-catalog-tag,
+[data-theme="vhs-tape"] .store-detail-label {
+  padding-right: 1.15rem;
+  min-width: 5.5rem;
+  justify-content: flex-start;
+}
+
+[data-theme="rom-cd"] .store-header,
+[data-theme="rom-cd"] .store-artwork-shell,
+[data-theme="rom-cd"] .store-detail-cover,
+[data-theme="rom-cd"] .store-detail-summary,
+[data-theme="rom-cd"] .store-detail-spec,
+[data-theme="rom-cd"] .store-signal-profile,
+[data-theme="rom-cd"] .store-stat-card,
+[data-theme="rom-cd"] .store-item-row,
+[data-theme="rom-cd"] .store-catalog-tag,
+[data-theme="rom-cd"] .store-detail-label,
+[data-theme="rom-cd"] .store-cta-chip,
+[data-theme="rom-cd"] .store-detail-buy {
+  box-shadow: inset 1px 1px 0 var(--ui-bevel-light), inset -1px -1px 0 var(--ui-bevel-dark);
+}
+
+[data-theme="rom-cd"] .store-header,
+[data-theme="rom-cd"] .store-artwork-shell,
+[data-theme="rom-cd"] .store-detail-cover,
+[data-theme="rom-cd"] .store-detail-summary,
+[data-theme="rom-cd"] .store-detail-spec,
+[data-theme="rom-cd"] .store-signal-profile,
+[data-theme="rom-cd"] .store-stat-card,
+[data-theme="rom-cd"] .store-item-row {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--bg-secondary) 98%, transparent), color-mix(in srgb, var(--bg-primary) 96%, transparent));
+}
+
+[data-theme="rom-cd"] .store-status-dot {
+  border-radius: 999px;
+}
+
+[data-theme="rom-cd"] .store-ribbon {
+  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+  opacity: 0.45;
+}
+
+[data-theme="rom-cd"] .store-tag,
+[data-theme="rom-cd"] .store-cta-chip {
+  color: var(--text-panel-accent);
+  background: linear-gradient(180deg, rgba(214, 218, 223, 0.96), rgba(178, 184, 191, 0.94));
+  border-color: rgba(0, 116, 217, 0.22);
+}
+
+[data-theme="rom-cd"] .store-meta .text-\[var\(--text-muted\)\],
+[data-theme="rom-cd"] .store-meta .text-\[var\(--accent-secondary\)\] {
+  color: var(--text-panel-accent);
+}
+
+[data-theme="rom-cd"] .store-status-panel {
+  color: var(--text-panel-strong);
+  background:
+    linear-gradient(180deg, rgba(214, 218, 223, 0.96), rgba(178, 184, 191, 0.94));
+  box-shadow: inset 1px 1px 0 var(--ui-bevel-light), inset -1px -1px 0 var(--ui-bevel-dark);
+}
+
+[data-theme="rom-cd"] .store-status-panel .store-status-value {
+  color: var(--text-panel-accent);
+}
+
+[data-theme="rom-cd"] .store-status-panel .store-progress {
+  background: rgba(65, 71, 83, 0.22);
+}
+
+[data-theme="rom-cd"] .store-meta .ui-panel,
+[data-theme="rom-cd"] .store-cta-chip {
+  color: var(--text-panel-strong);
+}
+
+[data-theme="vhs-tape"] .store-status-panel {
+  color: var(--text-panel-strong);
+  background:
+    linear-gradient(180deg, rgba(70, 31, 66, 0.82), rgba(36, 18, 36, 0.9));
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.04),
+    inset -1px -1px 0 rgba(7, 2, 7, 0.38),
+    0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+[data-theme="vhs-tape"] .store-status-panel .store-status-value {
+  color: var(--text-panel-accent);
+}
