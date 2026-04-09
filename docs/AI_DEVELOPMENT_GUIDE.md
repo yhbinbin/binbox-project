@@ -1,44 +1,63 @@
-# binbox AI 协作开发说明书
+# binbox AI Development Guide
 
-本说明书用于让 Copilot、Codex、Claude、Cursor 等 AI 工具更快理解 `binbox` 项目，并在修改代码时遵守当前工程边界。
+本文件给 Copilot、Codex、Claude、Cursor 等 AI 协作工具使用。
 
-## 1. 项目定位
+它不负责讲完整业务背景，而是负责回答三件事：
+
+- 这个仓库现在的真实边界是什么
+- 新代码应该写到哪里
+- 改 UI 和 Lab 时要遵守哪些约束
+
+配套阅读：
+
+- 业务需求：`docs/BUSINESS_REQUIREMENTS.md`
+- UI 设计结构：`docs/UI_STRUCTURE_FOR_DESIGN_TOOLS.md`
+- 主题参考：`docs/theme-vhs-tap.md`、`docs/theme-cd-rom.md`
+
+---
+
+## 1. Project Snapshot
 
 - 项目名：`binbox`
-- 形态：monorepo
+- 仓库形态：monorepo
 - 前端：Next.js App Router + TypeScript + TailwindCSS
 - 后端：FastAPI
-- 共享类型：TypeScript contract package
-- 风格方向：90s 数字怀旧语境下的音乐创作与 Web Audio 交互实验网站
+- 共享类型：`packages/contract`
+- 项目定位：90s 数字怀旧语境下的音乐创作、内容展示与 Web Audio 实验站点
 
-当前阶段目标不是把所有需求一次性做完，而是持续完善：
+当前阶段不是做“完整商业系统”，而是持续完善：
 
-- 品牌型内容站点
-- 浏览器内声音实验模块
-- 文章内容中枢
-- 无支付的商店展示
-- 为音频分析与 AI 辅助预留后端能力
+- 品牌与作品展示
+- Lab 交互实验
+- Archive 内容中枢
+- 无支付的 Store 展示
+- 音频分析 / AI 辅助的后端引擎层
 
-## 2. 仓库结构
+---
 
-```text
-binbox-project/
-├─ apps/
-│  ├─ web/              # Next.js 前端
-│  └─ api/              # FastAPI 后端
-├─ packages/
-│  └─ contract/         # 前后端共享 TS 契约
-├─ docs/
-│  └─ AI_DEVELOPMENT_GUIDE.md
-├─ package.json
-└─ README.md
-```
+## 2. Source Of Truth
 
-## 3. AI 修改代码时的总原则
+AI 在改代码前，先以这三份文档为准：
 
-### 3.1 优先维护现有信息架构
+1. `docs/BUSINESS_REQUIREMENTS.md`
+   说明项目想做什么、当前非目标是什么
+2. `docs/UI_STRUCTURE_FOR_DESIGN_TOOLS.md`
+   说明页面结构、视觉人格、主题关系
+3. 本文档
+   说明代码边界、落点和修改约束
 
-前端正式顶层结构只有：
+如果三者冲突，优先顺序：
+
+1. 代码当前真实结构
+2. `BUSINESS_REQUIREMENTS.md`
+3. `UI_STRUCTURE_FOR_DESIGN_TOOLS.md`
+4. 本文档中的实现建议
+
+---
+
+## 3. Current IA And Routes
+
+当前正式顶层 IA 只有：
 
 - `Home`
 - `Music`
@@ -47,7 +66,7 @@ binbox-project/
 - `Store`
 - `About`
 
-对应路由：
+对应正式路由：
 
 - `/{locale}`
 - `/{locale}/music`
@@ -61,20 +80,69 @@ binbox-project/
 - `/{locale}/store/[slug]`
 - `/{locale}/about`
 
-不要重新引入或恢复为顶层正式路由：
+不要恢复为正式顶层入口：
 
 - `samples`
 - `tutorials`
+- 账户、支付、订单、CMS 后台
 
-它们当前不属于正式 IA。
+---
 
-### 3.2 优先在“活跃目录”里改代码
+## 4. Monorepo Boundaries
 
-当前活跃目录：
+```text
+binbox-project/
+├─ apps/
+│  ├─ web/              # Next.js 前端
+│  └─ api/              # FastAPI 后端
+├─ packages/
+│  └─ contract/         # 共享 TS 类型
+├─ docs/
+└─ README.md
+```
+
+### 4.1 apps/web
+
+负责：
+
+- 页面路由
+- 组件
+- UI / 主题 / 动效
+- i18n
+- MDX 内容
+- 浏览器内音频交互
+
+### 4.2 apps/api
+
+负责：
+
+- 音频分析
+- AI 辅助
+- 推荐与标签分析
+- 轻量 JSON 接口
+
+### 4.3 packages/contract
+
+负责：
+
+- 前后端共享 TypeScript 数据结构
+
+不要放：
+
+- React 组件
+- FastAPI schema
+- 依赖具体框架运行时的逻辑
+
+---
+
+## 5. Active Directories
+
+优先修改这些目录：
 
 - `apps/web/src/app/[locale]`
 - `apps/web/src/components`
 - `apps/web/src/lib`
+- `apps/web/src/styles`
 - `apps/web/src/messages`
 - `apps/web/content/archive`
 - `apps/api/app/api`
@@ -83,7 +151,7 @@ binbox-project/
 - `apps/api/app/repositories`
 - `packages/contract/src`
 
-历史或非主路径目录：
+当前不是新功能主入口的历史/遗留目录：
 
 - `apps/web/src/_legacy`
 - `apps/web/src/app-binbox`
@@ -95,110 +163,104 @@ binbox-project/
 - `apps/api/app/api/samples`
 - `apps/api/app/api/users`
 
-这些目录当前不是主开发入口。除非是专门整理遗留结构，否则不要把新功能继续加进去。
+除非用户明确要求清理遗留结构，否则不要继续往这些目录加新东西。
 
-### 3.3 优先保持“前端内容站 + 后端引擎层”的边界
+---
 
-- `apps/web` 负责页面、交互、内容、i18n、浏览器端音频体验
-- `apps/api` 负责音频分析、AI 辅助、推荐、轻量内容接口
-- `packages/contract` 负责共享接口结构
+## 6. Frontend Rules
 
-不要把复杂业务逻辑塞进：
+### 6.1 i18n
 
-- Next.js page 文件
-- FastAPI route 文件
+使用 `next-intl`。
 
-推荐结构：
-
-- 页面只负责展示和页面级数据组织
-- React 组件负责 UI 和交互
-- 前端音频逻辑放 `apps/web/src/lib/audio`
-- FastAPI route 只负责入参与出参
-- 核心处理逻辑放 `apps/api/app/services`
-
-## 4. 前端说明
-
-### 4.1 前端主目录
-
-- `apps/web/src/app/[locale]`: 页面路由
-- `apps/web/src/components`: 组件
-- `apps/web/src/components/lab`: Lab 实验模块
-- `apps/web/src/lib/audio`: Tone.js、WaveSurfer.js 等音频逻辑
-- `apps/web/src/lib/api`: 前端 API 调用封装
-- `apps/web/src/messages`: 中英文本
-- `apps/web/content/archive`: MDX 文章内容
-- `apps/web/public`: 图片、音频等静态资源
-
-### 4.2 国际化要求
-
-使用 `next-intl`，所有新增页面和公共文案都要同时维护：
+新增页面和公共文案时，必须同步维护：
 
 - `apps/web/src/messages/en.json`
 - `apps/web/src/messages/zh.json`
 
-新增文案时：
+不要在页面里硬编码：
 
-1. 同时补英文和中文
-2. 保持 key 结构一致
-3. 不要在页面里硬编码 Header、按钮、说明文字
+- Header 文案
+- 按钮文案
+- 页面说明文字
 
-### 4.3 页面风格要求
+### 6.2 Styling
 
-整体风格：
+样式目录：
 
-- 极简
-- 克制
-- 内容优先
-- 避免过度卡片化
-- 内容页容器偏窄，阅读优先
+- `apps/web/src/styles/base`
+- `apps/web/src/styles/pages`
+- `apps/web/src/styles/theme.css`
 
-AI 生成 UI 时不要：
+原则：
 
-- 引入复杂 dashboard 风格
-- 过多分栏和重卡片布局
-- 为了“炫”而破坏可读性
+- 不要把大量页面样式重新塞回 `globals.css`
+- 页面样式优先放入对应 `pages/*.css`
+- 共享基础规则放 `base/*.css`
+- 主题 token 只放 `theme.css`
 
-### 4.4 Archive 内容规则
+### 6.3 Theme Model
 
-目录：
+当前运行时主题只有两套：
+
+- `VHS-Tape`
+- `ROM-CD`
+
+前端 UI 尤其是 Lab 页面，遵守五层语义模型：
+
+1. `Backdrop`
+2. `Shell`
+3. `Raised Silver`
+4. `Dark Button`
+5. `Content Screen`
+
+`ROM-CD` 的硬规则：
+
+- 银灰底（`Shell`、`Raised Silver`）只允许深色字
+- 深色底（`Backdrop`、`Dark Button`、`Content Screen`）只允许亮色字
+- 字号不要小于 `12px`
+
+详细约束见：
+
+- `~/.codex/skills/binbox-theme-guardrails/SKILL.md`
+- `docs/theme-vhs-tap.md`
+- `docs/theme-cd-rom.md`
+
+### 6.4 Archive Content
+
+文章位置：
 
 - `apps/web/content/archive/*.mdx`
 
-Frontmatter 关注字段：
+frontmatter 重点字段：
 
 - `title`
 - `date`
 - `tags`
 - `description`
 
-新增文章时：
+命名建议：
 
-- 文件名建议 `YYYY-topic-keyword.mdx`
-- 内容结构优先采用：背景 / 方法 / 示例 / 反思
+- `YYYY-topic-keyword.mdx`
 
-## 5. 后端说明
+---
 
-### 5.1 后端定位
+## 7. Backend Rules
 
-`apps/api` 不是传统业务后台，当前主要是“引擎层”：
+### 7.1 API Positioning
+
+`apps/api` 不是传统业务后台，而是引擎层。
+
+重点能力：
 
 - 音频分析
 - AI 创作辅助
-- 推荐和标签分析
+- 标签 / 推荐
 - 内容数据接口
 
-### 5.2 后端主目录
+### 7.2 Current Active API Modules
 
-- `apps/api/app/api`: 路由层
-- `apps/api/app/services`: 功能逻辑层
-- `apps/api/app/schemas`: Pydantic 输入输出结构
-- `apps/api/app/repositories`: 数据源适配层
-- `apps/api/app/core`: 配置和日志
-- `apps/api/app/db`: DB 基础设施
-
-### 5.3 当前活跃 API 入口
-
-根据 `apps/api/app/api/router.py`，当前正式接入的路由是：
+根据当前路由组织，优先使用或扩展：
 
 - `archive`
 - `store`
@@ -208,66 +270,42 @@ Frontmatter 关注字段：
 - `tags`
 - `health`
 
-如果 AI 要新增一个后端能力，优先加到这些现有模块，或者按同样模式新增新模块。
+### 7.3 Recommended API Flow
 
-### 5.4 后端编码规则
+新增后端能力时：
 
-新增接口推荐顺序：
+1. 在 `schemas` 定义输入输出
+2. 在 `services` 实现核心逻辑
+3. 在 `api/.../routes.py` 暴露接口
+4. 如需共享前端类型，再补到 `packages/contract`
 
-1. 在 `schemas` 里先定义输入输出结构
-2. 在 `services` 里实现核心逻辑
-3. 在 `api/.../routes.py` 里暴露 HTTP 接口
-4. 如果前端也要共享这个结构，再补到 `packages/contract`
+不要在 route 文件里堆业务逻辑。
 
-不要直接在 route 文件里写大段业务逻辑。
+---
 
-## 6. 共享契约包说明
+## 8. Where New Work Should Go
 
-目录：
-
-- `packages/contract/src`
-
-用途：
-
-- 定义前后端共享的 TypeScript 类型
-- 让前端请求和后端返回的数据结构更一致
-
-适合放这里的内容：
-
-- `AudioAnalyzeResponse`
-- 文章摘要结构
-- Store Item DTO
-- 推荐结果 DTO
-
-不适合放这里的内容：
-
-- React 组件
-- FastAPI schema
-- 依赖具体框架运行时的代码
-
-## 7. 新功能应该放哪里
-
-### 7.1 纯展示型功能
+### 8.1 纯展示改动
 
 放 `apps/web`
 
 例子：
 
 - 首页改版
-- 新增文章页样式
-- Store 页面视觉优化
+- Store 视觉优化
+- Music 页布局调整
 
-### 7.2 前端交互型功能
+### 8.2 纯前端交互
 
 放 `apps/web`
 
 例子：
 
-- Break Slicer 前端操作增强
-- Music Theory Keyboard UI 调整
-- 浏览器内纯前端声音实验
+- Break Slicer 前端操作优化
+- 鼓机交互改造
+- 乐理键盘页面 UI / 交互优化
 
-### 7.3 Python 计算型功能
+### 8.3 Python 计算能力
 
 放 `apps/api`
 
@@ -276,11 +314,11 @@ Frontmatter 关注字段：
 - BPM 检测
 - key 检测
 - onset / slice 检测
-- AI 生成描述
+- AI 描述生成
 
-### 7.4 前后端联动功能
+### 8.4 前后端联动
 
-需要同时改：
+同时改：
 
 - `apps/api`
 - `apps/web`
@@ -288,149 +326,115 @@ Frontmatter 关注字段：
 
 推荐顺序：
 
-1. 先想清楚接口结构
-2. 后端先实现返回
-3. 前端再接入和渲染
-4. 如果多个页面都用，抽到 `contract`
+1. 先想清接口结构
+2. 后端先跑通
+3. 前端再接入
+4. 多处复用的结构再抽到 `contract`
 
-## 8. AI 处理常见任务时的建议流程
+---
 
-### 8.1 新增一个 Lab 实验页面
+## 9. Practical Workflows
 
-建议步骤：
+### 9.1 新增一个 Lab 子页面
 
-1. 在 `apps/web/src/app/[locale]/lab/...` 下建新页面
-2. 在 `apps/web/src/components/lab/...` 下建对应组件
-3. 在 `apps/web/src/messages/en.json` 和 `zh.json` 增加文案
-4. 在 `apps/web/src/app/[locale]/lab/page.tsx` 增加入口
-5. 如果需要后端能力，再补 `apps/api`
+1. 在 `apps/web/src/app/[locale]/lab/...` 建页面
+2. 在 `apps/web/src/components/lab/...` 建组件
+3. 在 `messages/en.json` 与 `zh.json` 加文案
+4. 在 `lab/page.tsx` 增加入口
+5. 如需后端能力，再补 `apps/api`
 
-### 8.2 新增一个音频分析接口
+### 9.2 新增一个音频分析接口
 
-建议步骤：
+1. `apps/api/app/schemas`
+2. `apps/api/app/services`
+3. `apps/api/app/api/.../routes.py`
+4. 需要时补 `packages/contract`
+5. 前端在 `apps/web/src/lib/api` 增加调用
 
-1. 在 `apps/api/app/schemas/audio.py` 定义 schema
-2. 在 `apps/api/app/services/audio` 里写逻辑
-3. 在 `apps/api/app/api/audio/routes.py` 暴露接口
-4. 如果前端要复用响应结构，在 `packages/contract/src/audio` 补 TS 类型
-5. 前端在 `apps/web/src/lib/api` 增加调用封装
-
-### 8.3 新增一篇 Archive 文章
-
-建议步骤：
+### 9.3 新增一篇 Archive 文章
 
 1. 在 `apps/web/content/archive` 新建 `.mdx`
 2. 写 frontmatter
-3. 确认 `/archive` 和 `/archive/[slug]` 能读到内容
+3. 确认 `/archive` 与 `/archive/[slug]` 可读取
 
-## 9. 本项目的运行方式
+---
 
-在仓库根目录：
+## 10. Pre-Ship Checks
 
-```bash
-npm install
-npm run dev:web
-npm run lint:web
-npm run build:web
-```
-
-后端：
-
-```bash
-cd apps/api
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
-
-根目录也提供了：
-
-```bash
-npm run dev:api
-```
-
-默认前端：
-
-- `http://localhost:3000`
-
-默认后端文档：
-
-- `http://localhost:8000/docs`
-
-## 10. AI 在提交代码前应做的检查
-
-前端改动后至少检查：
+前端改动后至少执行：
 
 ```bash
 npm run lint:web
+npx tsc --noEmit -p /Users/yanghongbin/binbox-project/apps/web/tsconfig.json
 ```
 
-如果改了 TS 结构，最好同时确认：
-
-- 页面导入路径是否仍正确
-- i18n key 是否中英文都补齐
-- 是否误把新代码写进 `_legacy` 或历史目录
-
-后端改动后至少检查：
+后端改动后至少执行：
 
 ```bash
 cd apps/api
 python3 -m compileall app
 ```
 
-如果改了 API：
+并手动检查：
 
-- 路由是否已挂到 `apps/api/app/api/router.py`
-- schema 是否和返回结构一致
-- 前端调用路径是否对应更新
+- i18n key 是否中英文都补齐
+- 是否误写进遗留目录
+- 是否破坏现有 IA
+- 是否违背主题规则
 
-## 11. AI 不应做的事情
+---
 
-- 不要恢复 `samples`、`tutorials` 为顶层正式路由
-- 不要把新代码继续写入 `_legacy` 或 `app-binbox`
-- 不要把大段业务逻辑塞进 page 或 route 文件
+## 11. Things AI Should Not Do
+
+- 不要恢复 `samples`、`tutorials` 为正式顶层路由
+- 不要引入支付、订单、账户系统
+- 不要把站点改成 SaaS 仪表盘
+- 不要把大段业务逻辑塞进 page 或 route
 - 不要只改一种语言文案
-- 不要新增账户、订单、支付等当前阶段明确非目标的系统
-- 不要擅自把项目改造成“后台管理系统”风格
+- 不要在 Lab 页面随意破坏当前的主题结构语言
 
-## 12. 给 AI 的简短上下文模板
+---
 
-当你把本项目交给其他 AI 时，可以先提供这段上下文：
+## 12. Short Context Template For Other AI
 
 ```md
-这是一个 monorepo：
-- apps/web: Next.js App Router 前端
-- apps/api: FastAPI 后端
-- packages/contract: 前后端共享 TS 类型
+This is the `binbox` monorepo.
 
-正式前端 IA 只有：
+- apps/web: Next.js App Router frontend
+- apps/api: FastAPI backend engine layer
+- packages/contract: shared TS contracts
+
+Official IA:
 Home / Music / Lab / Archive / Store / About
 
-当前活跃前端目录：
+Official lab routes:
+- /{locale}/lab/breakbeat-generator
+- /{locale}/lab/break-slicer
+- /{locale}/lab/music-theory-keyboard
+
+Do not reintroduce:
+- samples
+- tutorials
+- auth / payment / orders / admin systems
+
+Active frontend directories:
 - apps/web/src/app/[locale]
 - apps/web/src/components
 - apps/web/src/lib
+- apps/web/src/styles
 - apps/web/src/messages
 - apps/web/content/archive
 
-当前活跃后端目录：
+Active backend directories:
 - apps/api/app/api
 - apps/api/app/services
 - apps/api/app/schemas
 - apps/api/app/repositories
 
-不要把新代码写进：
-- apps/web/src/_legacy
-- apps/web/src/app-binbox
-- apps/api/app/api/products 等历史残留目录
+Theme runtime:
+- VHS-Tape
+- ROM-CD
 
-新增功能时优先保持：
-- 前端负责页面与交互
-- 后端负责音频分析和 AI 能力
-- 共享结构放 packages/contract
+UI edits should follow the five-layer model:
+Backdrop / Shell / Raised Silver / Dark Button / Content Screen
 ```
-
----
-
-如果后续仓库结构再调整，这份文档也应同步更新，否则 AI 很容易根据过期目录继续往错误位置写代码。

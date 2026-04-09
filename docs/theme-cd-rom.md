@@ -1,99 +1,176 @@
-# DESIGN SYSTEM SPECIFICATION: THE TACTILE COMMAND STATION
+# ROM-CD Theme Reference
 
-## 1. Overview & Creative North Star
-This design system rejects the "floating card" meta of modern SaaS in favor of a **Tactile Command Station**. The creative vision is a high-end restoration of a 1995 hardware terminal—merging the industrial rigidity of Windows 95 chassis design with the glossy, optimistic "Frutiger Aero" digital glow of the early 2000s.
+本文件只描述 `ROM-CD` 主题本身，不重复站点业务和页面 IA。
 
-The interface should not feel like a website; it should feel like a specialized device. We achieve this through **intentional asymmetry**, **chassis-and-screen layering**, and a **"machine-stamped" typography hierarchy**. We are building a "Futuristic Control Desktop" where every pixel serves a rational, technical purpose.
+配套文档：
 
-### The Creative North Star: "The Analog-Digital Bridge"
-The design bridges the gap between physical industrial equipment (brushed silver, hard edges) and the infinite digital void of a cold CRT monitor.
-
----
-
-## 2. Colors & Materiality
-The palette is divided into two distinct environments: the **Chassis** (physical frame) and the **CRT** (software interface).
-
-### Palette Strategy
-- **The CRT Deep Blue:** `surface` (#0E1322) and `surface-container-lowest` (#090E1C). This is the "back-of-the-monitor" depth.
-- **The Chassis Silver:** `secondary` (#C6C6C6). Used for headers, panels, and "plastic" controls.
-- **System Glow:** `primary` (#5ED4FF) and `tertiary` (#2AE500). These are the electric highlights that mimic LED indicators and active data streams.
-
-### The "No-Line" Rule
-Standard 1px borders are strictly prohibited for defining sections. Instead, boundaries must be established through:
-1. **Background Shifts:** Transitioning from `surface-container-low` to `surface-container-high`.
-2. **Inset Shadow-play:** Using `surface-container-lowest` to create a "recessed" screen look within a `secondary` silver chassis.
-
-### Signature Textures
-- **Monitor Glow:** Floating technical elements should utilize a subtle gradient from `primary` (#5ED4FF) to `primary-container` (#001219) at low opacity to simulate light bleed from a screen.
-- **Micro-Grids:** Use `outline-variant` (#46464C) at 15% opacity to create a technical background grid, reinforcing the "device" aesthetic.
+- 业务需求：`docs/BUSINESS_REQUIREMENTS.md`
+- 开发说明：`docs/AI_DEVELOPMENT_GUIDE.md`
+- UI 结构：`docs/UI_STRUCTURE_FOR_DESIGN_TOOLS.md`
 
 ---
 
-## 3. Typography
-Typography is the primary driver of the "device label" aesthetic.
+## 1. Theme Position
 
-### Technical Sans (Space Grotesk)
-*Used for: Display, Headlines, Labels.*
-- **Role:** Represents machine-stamped serial numbers and hardware labels.
-- **Application:** Use `headline-sm` in all-caps for section headers to mimic industrial labeling. Use `label-md` for technical readouts.
+`ROM-CD` 代表 `binbox` 里更理性、更设备化、更系统界面的一面。
 
-### Functional Sans (Inter)
-*Used for: Title, Body.*
-- **Role:** Represents the "Monitor Code"—the functional data outputted by the machine.
-- **Application:** Always align to a strict grid. Use `body-sm` for high-density data tables to maintain the "control room" density.
+一句话：
 
----
+> 冷蓝系统底上的银灰设备壳体。
 
-## 4. Elevation & Depth (The Layering Principle)
-In this system, depth is achieved by "nesting" rather than "floating."
+它应该让人联想到：
 
-- **The Stack:**
-1. **Level 0 (Base):** `surface` — The physical outer casing.
-2. **Level 1 (The Screen):** `surface-container-lowest` — A recessed area that feels "behind" the chassis.
-3. **Level 2 (The Interface):** `surface-container` — The active panels within the screen.
-- **Ambient Glows:** For floating technical modals, use a large-scale, low-opacity (6%) shadow tinted with `primary` (#5ED4FF). This creates "screen glow" rather than a traditional drop shadow.
-- **The "Ghost Border":** If a separation is mandatory for accessibility, use the `outline-variant` token at 20% opacity. Never use 100% opaque lines.
+- 千禧年前后的系统桌面
+- Win95 / 早期数字硬件
+- 银灰机壳
+- 深色内容屏
+- 控制台与工作站
 
 ---
 
-## 5. Components
+## 2. Core Mood
 
-### Primitive Geometry
-**The 0px Mandate:** All components (Buttons, Cards, Inputs, Modals) must use a **0px border radius**. Soft corners are antithetical to this industrial system.
+关键词：
 
-### Buttons (Tactile Plastic)
-- **Primary:** `primary` (#5ED4FF) background with `on-primary` (#003545) text. High contrast, glowing.
-- **Secondary (The Win95 Button):** `secondary-container` (#484949) background. Use a "beveled" look by applying a 1px top-highlight of `secondary-fixed` (#E3E2E2).
-- **Tertiary:** Text-only using `tertiary` (#2AE500) with a 2px bottom-underline for a "command line" feel.
+- cold blue
+- silver chassis
+- digital terminal
+- millennium control room
+- win95 shell
+- restored workstation
 
-### Input Fields (Recessed Ports)
-- **State:** Inputs should use `surface-container-lowest` (#090E1C) to appear as if they are "cut into" the interface.
-- **Focus:** When active, the border-bottom should "glow" using the `primary` token.
+它不是：
 
-### Cards & Data Panels
-- **Prohibited:** Box-shadows and divider lines.
-- **Required:** Use "Header Strips." A 24px tall bar of `secondary` (#C6C6C6) at the top of a panel provides a Win95 window-chrome feel without the clutter.
-
-### Additional Component: "The Status LED"
-A small (8px) square using `tertiary` (green) or `error` (red) to indicate system health, placed in the top-right of all major containers.
+- 过亮的 Frutiger Aero 首页
+- 云朵泡泡式 nostalgia
+- 企业科技官网
 
 ---
 
-## 6. Do’s and Don’ts
+## 3. Surface Logic
 
-### Do:
-- **Use Intentional Asymmetry:** Align the main control panel to the left, and let technical data "leak" into the right margin.
-- **High Density:** Pack information tightly. It should look like a professional tool that requires expertise to operate.
-- **Monospaced-Feel:** Even when using Inter, use "tabular num" OpenType features for all numerical data.
+`ROM-CD` 的核心不是“冷蓝色”，而是“壳体与屏幕”的层次。
 
-### Don’t:
-- **No Rounded Corners:** Any radius above 0px breaks the "Chassis" illusion.
-- **No Soft Transitions:** Interactions should be "instant" or use a 50ms "blip" transition to mimic old hardware response times.
-- **No Generic White:** Never use pure white (#FFFFFF). Use `on-surface` (#DEE1F7) for a colder, digital blue-white.
-- **No Card Stacking:** Avoid placing cards on top of cards. If you need a new layer, use a "Window Overlay" that mimics a OS-level pop-up.
+采用五层结构：
+
+1. `Backdrop`
+2. `Shell`
+3. `Raised Silver`
+4. `Dark Button`
+5. `Content Screen`
+
+## 3.1 Text Rules
+
+银灰底：
+
+- `Shell`
+- `Raised Silver`
+
+只允许：
+
+- 黑
+- 深蓝
+- 深绿
+
+深色底：
+
+- `Backdrop`
+- `Dark Button`
+- `Content Screen`
+
+只允许：
+
+- 白
+- 亮绿
+- 亮橙
+- 银灰
+- 亮蓝
+
+禁止：
+
+- 银灰底灰字
+- 银灰底亮绿字
+- 银灰底亮橙字
+- 深色底深蓝字
 
 ---
 
-## 7. Interaction Design
-- **Hover States:** Instead of changing opacity, use a color-flip. (e.g., Background becomes `primary`, text becomes `on-primary`).
-- **Active States:** Provide a "pressed" effect by shifting the element 1px down and 1px right, mimicking a physical plastic button press.
+## 4. Material Direction
+
+## 4.1 Shell
+
+- 银灰外壳
+- 有机身壳体感
+- 可有轻微 bevel
+- 不要太锋利到割手
+
+## 4.2 Raised Silver
+
+- 壳体上更突起的金属/塑料银色件
+- 比 `Shell` 更亮一点
+- 适合按钮、条块、切换块
+
+## 4.3 Dark Button
+
+- 壳体上的黑色或深灰凸起按钮
+- 像橡胶按键或深色功能键
+
+## 4.4 Content Screen
+
+- 凹陷进去的深色显示区
+- 像小 CRT / LCD / 设备读数窗
+
+---
+
+## 5. Color Direction
+
+主关系：
+
+- 冷蓝底
+- 银灰壳体
+- 深色屏幕
+- 蓝、绿、橙做信号高亮
+
+使用原则：
+
+- 大面积用冷底和银灰
+- 亮蓝用于系统强调
+- 亮绿用于状态/激活
+- 亮橙用于提示/参数变化
+
+---
+
+## 6. Shape And Texture
+
+- 可有小圆角，但不要过软
+- 不走玻璃感
+- 优先机壳、窗口、嵌入式面板
+- 可以有微弱网格、微弱显示器辉光
+
+适合：
+
+- `Lab`
+- `Breakbeat Generator`
+- `Music Theory Keyboard`
+- 一部分 `Lab Index`
+
+---
+
+## 7. Motion
+
+- 反应应短、直接、机械
+- hover 以轻微亮度变化和边框变化为主
+- active 像设备被按下
+- 避免漂浮感太强的动画
+
+---
+
+## 8. Quick Checklist
+
+在 `ROM-CD` 下检查：
+
+- 有没有银灰底灰字
+- 有没有银灰底亮绿/亮橙字
+- 有没有深色屏里混入深色字
+- 有没有字号低于 `12px`
+- 有没有壳体和屏幕看起来像同一层

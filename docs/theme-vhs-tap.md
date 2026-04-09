@@ -1,84 +1,187 @@
-# Design System Document
+# VHS-Tape Theme Reference
 
-## 1. Overview & Creative North Star
-The Creative North Star for this design system is **"Hardware Archaeology."** 
+本文件只描述 `VHS-Tape` 主题本身，不重复站点业务和页面 IA。
 
-This is not a dashboard; it is a piece of found equipment. The interface should feel like a high-end rack-mounted audio unit or a forgotten terminal from a 1990s research lab. We achieve this by contrasting a "Cold Frame"—rigid, industrial, and structured—with "Hot Signals"—vibrant, emotional, and data-rich interactions.
+配套文档：
 
-The design breaks the "SaaS template" look by utilizing intentional asymmetry, hardware-inspired labeling, and a layout that prioritizes the "device" over the "page." We move away from traditional web grids to create a tactile, physical experience where the screen feels like a glass window over an internal mechanism.
-
----
-
-## 2. Color & Tonal Architecture
-The system utilizes a three-tier thematic approach (VHS, ROM, Vinyl) mapped to a core Material logic. 
-
-### The "No-Line" Rule
-To maintain a high-end editorial feel, **1px solid borders are strictly prohibited for sectioning.** Boundaries must be defined through:
-1.  **Tonal Transitions:** Defining an area by placing a `surface-container-low` section against a `background`.
-2.  **Luminance Shifts:** Using `surface-bright` for active interactive zones against `surface-dim` foundations.
-
-### Surface Hierarchy & Nesting
-Treat the UI as a physical stack of components. Use the container tiers to create "nested" depth:
-*   **Level 0 (Background):** The outermost chassis.
-*   **Level 1 (Surface-Container-Low):** Large structural panels.
-*   **Level 2 (Surface-Container):** Content groups and playback controls.
-*   **Level 3 (Surface-Container-High):** Interactive "buttons" or modules that require tactile prominence.
-
-### The "Glass & Gradient" Rule
-Floating elements (such as playback overlays or tooltips) must utilize **Glassmorphism**. Apply a semi-transparent `surface-container` color with a `backdrop-blur` (12px–20px). Main CTAs should use a subtle linear gradient transitioning from `primary` to `primary-container` at a 135-degree angle to provide a "lit" hardware appearance.
+- 业务需求：`docs/BUSINESS_REQUIREMENTS.md`
+- 开发说明：`docs/AI_DEVELOPMENT_GUIDE.md`
+- UI 结构：`docs/UI_STRUCTURE_FOR_DESIGN_TOOLS.md`
 
 ---
 
-## 3. Typography
-The typographic system juxtaposes industrial rigidity with modern clarity.
+## 1. Theme Position
 
-*   **Display & Headline (Space Grotesk):** This is our "Industrial" voice. It mimics narrow electronic labeling and technical manuals. Use `headline-lg` for track titles and `label-sm` for hardware-style technical annotations (e.g., "SAMP_RATE: 44.1kHz").
-*   **Body & Title (Work Sans):** Our "Neutral" voice. Work Sans provides high readability for archival descriptions and long-form metadata. It balances the mechanical feel of the headers with human approachability.
+`VHS-Tape` 代表 `binbox` 里更私密、更情绪化、更像旧媒介包装的一面。
 
-**Hierarchy Note:** High-contrast scale is vital. Pair a massive `display-lg` title with a tiny, uppercase `label-md` technical string to create an editorial, non-generic layout.
+一句话：
 
----
+> 夜晚的设备壳体里，漏出被录坏了的热信号。
 
-## 4. Elevation & Depth
-Depth in this system is achieved through **Tonal Layering** rather than drop shadows.
+它应该让人联想到：
 
-*   **The Layering Principle:** Stack `surface-container-lowest` cards on `surface-container-low` sections to create a natural, "milled" recession or "extruded" lift.
-*   **Ambient Shadows:** For floating hardware modules, use extra-diffused shadows (Blur: 40px+) at 6% opacity. The shadow color must be a tinted version of `on-surface` (#fcdbff at 6%) to simulate ambient light scattering within the device.
-*   **The Ghost Border:** If a separator is required for accessibility, use a "Ghost Border": the `outline-variant` token at **15% opacity**. Never use 100% opaque lines.
-*   **Glassmorphism:** Use semi-transparent `surface` tokens for overlays to allow the "hot signals" of the background (like scrolling waveforms) to bleed through, softening the edges of the UI.
+- VHS 录像带
+- 旧录音机
+- 损坏接收器
+- 深夜卧室
+- 被重新采样的热带商业残影
 
 ---
 
-## 5. Components
+## 2. Core Mood
 
-### Buttons (Hardware Toggles)
-*   **Primary:** Gradient fill (`primary` to `primary-container`), `none` or `sm` roundedness. Text is `label-md` uppercase.
-*   **Secondary:** Ghost Border (20% opacity) with a `surface-container-high` background.
-*   **Tertiary:** No background. Underlined with `secondary` color only on hover.
-*   **Interaction:** On press, the component should shift down by 1px to simulate a physical mechanical switch.
+关键词：
 
-### Inputs & Terminal Fields
-*   **Text Inputs:** Use `surface-container-lowest` with a "Ghost Border." The cursor should be a solid block of `secondary` color.
-*   **Labels:** Always `label-sm` in `on-surface-variant`, placed above the field or integrated into the top-left "frame" of the input.
+- vaporwave signal
+- damaged tape
+- CRT afterglow
+- bedroom producer
+- private archive
+- warm signal inside dark hardware
 
-### Lists & Archival Cards
-*   **Rule:** Forbid divider lines. Separate items using `8px` of vertical white space and a subtle background shift to `surface-container-low` on hover.
-*   **Metadata:** Use "Hot" signal colors (`tertiary` or `error_dim`) for technical tags to make them pop against the "Cold" base.
+它不是：
 
-### Specialized Component: The Signal Ribbon
-A thin (4px) horizontal bar that runs across the top of sections. Use the `secondary` or `tertiary` tokens. This acts as a "live" wire, grounding the industrial aesthetic and indicating active data flow or playback status.
+- 纯紫粉 synthwave 海报
+- 少女化 vaporwave
+- 漂浮玻璃面板站
 
 ---
 
-## 6. Do's and Don'ts
+## 3. Surface Logic
 
-### Do:
-*   **Do** use asymmetrical layouts. Align text to the far left and technical metadata to the far right.
-*   **Do** use `label-sm` for "Hardware Labels" tucked into the corners of containers.
-*   **Do** favor `none` (0px) or `sm` (2px) roundedness for a sharper, digital-era feel. Use `full` (9999px) only for specific "LED" indicators.
+虽然 `VHS-Tape` 比 `ROM-CD` 更柔性，但仍然遵守同样的五层结构：
 
-### Don't:
-*   **Don't** use standard 12-column bootstrap-style grids. Create intentional "dead space" to mimic industrial design.
-*   **Don't** use pure black shadows or high-contrast white borders.
-*   **Don't** use generic icons. Favor text-based labels or custom-drawn technical glyphs that fit the narrow industrial aesthetic.
-*   **Don't** allow the UI to feel "flat." If a screen feels boring, add a subtle `surface-variant` texture or a 2% opacity noise grain.
+1. `Backdrop`
+2. `Shell`
+3. `Raised Silver`
+4. `Dark Button`
+5. `Content Screen`
+
+与 `ROM-CD` 的区别不是结构不同，而是材质不同。
+
+## 3.1 Text Rules
+
+`VHS-Tape` 为了减轻主题切换时的复杂判断，五层都可以倾向：
+
+- 深色底
+- 亮色字
+
+推荐亮字集合：
+
+- 米白
+- 银灰
+- 暖黄
+- 亮绿
+- 亮蓝
+- 适量热粉 / 珊瑚
+
+但仍要注意：
+
+- 不要让亮色字互相打架
+- 霓虹主要留给 `Backdrop` 与 `Screen`
+- `Shell` 与 `Raised` 不应过 Neon
+
+---
+
+## 4. Material Direction
+
+## 4.1 Backdrop
+
+- 深色环境层
+- VHS 扫描线
+- 模糊光晕
+- 热信号漂浮在远处
+
+## 4.2 Shell
+
+- 更像旧硬件外壳、录像带壳、老电视壳体
+- 要有固态、实体感
+- 不要太紫，不要太 Neon
+- 可以用更深、略透明的旧塑料或琥珀色调
+- 允许较疏的竖向波纹
+
+## 4.3 Raised Silver
+
+- 比 `Shell` 更亮一点
+- 像贴上去的铭牌、凸起塑料件、标签块
+- 可以用更细密的竖纹或贴纸纹理
+
+## 4.4 Dark Button
+
+- 不能只是纯黑
+- 应该更像橡胶按钮
+- 可用颗粒、斜纹、压感高光去表现
+
+## 4.5 Content Screen
+
+- 要和 `Shell` 明显区分
+- 更像老录音机、采样机、示波器的显示窗
+- 适合暗绿黑、冷静深色、扫描纹
+- 这里才承载主要 neon 感
+
+---
+
+## 5. Color Direction
+
+主关系：
+
+- 深色底
+- 实体旧壳体
+- 热信号色作为局部出现
+
+建议关系：
+
+- `Backdrop / Screen` 可以更 neon
+- `Shell / Raised` 更像旧设备本体
+- 热粉、热橙、亮青不要满屏铺
+
+---
+
+## 6. Shape And Texture
+
+- 保持更硬直的线条
+- 不建议大圆角
+- 允许：
+  - 扫描线
+  - 贴纸感
+  - 标签槽
+  - 盒体开口
+  - 竖向波纹
+
+它应该更像：
+
+- 一件实物介质
+
+而不是一块发光玻璃。
+
+适合：
+
+- `Home`
+- `Archive`
+- `Store`
+- `Break Slicer`
+
+---
+
+## 7. Motion
+
+- 更像信号闪现与媒介抖动
+- 可以有轻微漂移、扫描、脉冲
+- 但仍需克制
+
+不要：
+
+- 漂浮得太轻
+- 柔和得像现代玻璃 UI
+
+---
+
+## 8. Quick Checklist
+
+在 `VHS-Tape` 下检查：
+
+- `Shell` 和 `Screen` 是否真的分层
+- `Shell` 是否太 Neon
+- `Dark Button` 是否只是黑块，没有橡胶感
+- 霓虹是否过度挤到壳体层
+- 页面是否仍像实物设备，而不是梦幻海报

@@ -41,7 +41,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={messages}>
+    <NextIntlClientProvider locale={locale} messages={messages}>
       <ThemeProvider>
         <Navigation />
         <main className="relative mx-auto min-h-screen">{children}</main>
